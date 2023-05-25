@@ -1,0 +1,69 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+    mc:Ignorable="options">
+    <SolidColorBrush
+        x:Key="Common.Gray235"
+        options:Freeze="True"
+        Color="#ebebeb" />
+    <SolidColorBrush
+        x:Key="Common.Gray_ABABAB"
+        options:Freeze="True"
+        Color="#ABABAB" />
+    <!--  Button IsMouseOver  -->
+    <SolidColorBrush
+        x:Key="Common.Button.IsMouseOver"
+        options:Freeze="True"
+        Color="#f2ffff" />
+    <!--  Button Press Border用  -->
+    <SolidColorBrush
+        x:Key="Common.Green_008485"
+        options:Freeze="True"
+        Color="#008485" />
+    <SolidColorBrush
+        x:Key="Common.White"
+        options:Freeze="True"
+        Color="#FFFFFF" />
+    <SolidColorBrush
+        x:Key="Common.Green_005555"
+        options:Freeze="True"
+        Color="#005555" />
+    <SolidColorBrush
+        x:Key="EmpdHotKey.Background.Enabled"
+        options:Freeze="True"
+        Color="#EBEBEB" />
+    <SolidColorBrush
+        x:Key="Common.Gray171"
+        options:Freeze="True"
+        Color="#ababab" />
+    <SolidColorBrush
+        x:Key="EmpdHotKey.BorderBrush.Enabled"
+        options:Freeze="True"
+        Color="#ABABAB" />
+    <SolidColorBrush
+        x:Key="EmpdHotKey.Foreground.Enabled"
+        options:Freeze="True"
+        Color="#005555" />
+    <SolidColorBrush
+        x:Key="EmpdHotKey.Background.IsPressed"
+        options:Freeze="True"
+        Color="#008485" />
+    <SolidColorBrush
+        x:Key="EmpdHotKey.Background.IsMouseOver"
+        options:Freeze="True"
+        Color="#F2FFFF" />
+    <SolidColorBrush
+        x:Key="EmpdHotKey.BorderBrush.IsPressed"
+        options:Freeze="True"
+        Color="#80C1C2" />
+    <SolidColorBrush
+        x:Key="EmpdHotKey.Foreground.IsPressed"
+        options:Freeze="True"
+        Color="#FFFFFF" />
+    <SolidColorBrush
+        x:Key="EmpdHotKey.Foreground.Default"
+        options:Freeze="True"
+        Color="AliceBlue" />
+</ResourceDictionary>

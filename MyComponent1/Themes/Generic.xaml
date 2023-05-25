@@ -1,0 +1,9 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:MyComponent1.Component">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/MyComponent1;component/Style/MyButton.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MyComponent1;component/Style/MyTextBox.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

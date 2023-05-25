@@ -1,0 +1,24 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:MyComponent1.Component">
+
+    <ControlTemplate x:Key="MyTextBox_Default_Template" TargetType="{x:Type local:MyTextBox}">
+        <Border>
+            <TextBox
+                x:Name="Tb"
+                Width="{TemplateBinding Width}"
+                Height="{TemplateBinding Height}"
+                MaxLength="{TemplateBinding MaxLength}"
+                Text="{TemplateBinding Text}" />
+        </Border>
+    </ControlTemplate>
+
+    <Style x:Key="MyTextBox_Default_Style" TargetType="{x:Type local:MyTextBox}">
+        <Setter Property="Width" Value="100" />
+        <Setter Property="Height" Value="20" />
+        <Setter Property="Template" Value="{StaticResource MyTextBox_Default_Template}" />
+    </Style>
+
+    <Style BasedOn="{StaticResource MyTextBox_Default_Style}" TargetType="{x:Type local:MyTextBox}" />
+</ResourceDictionary>
