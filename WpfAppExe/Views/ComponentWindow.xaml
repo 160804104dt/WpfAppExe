@@ -1,0 +1,35 @@
+﻿<Window
+    x:Class="WpfAppExe.Views.ComponentWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WpfAppExe.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mvvm="http://prismlibrary.com/"
+    xmlns:uc="clr-namespace:WpfAppExe.Views.UserControls"
+    Title="ComponentView"
+    Width="1200"
+    Height="900"
+    mvvm:ViewModelLocator.AutoWireViewModel="True"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Grid>
+        <TabControl SelectedIndex="{Binding SelectedTabIndex.Value, UpdateSourceTrigger=PropertyChanged}">
+            <TabItem Header="listBox">
+                <uc:ListBoxUserControl />
+            </TabItem>
+            <TabItem Header="listView" />
+            <TabItem Header="DataGrid" />
+            <TabItem Header="XamDataGrid" />
+            <TabItem Header="Line直线">
+                <uc:LineUserControl />
+            </TabItem>
+            <TabItem Header="Rectangle矩形" />
+            <TabItem Header="Ellipse椭圆" />
+            <TabItem Header="Polygon多边形" />
+            <TabItem Header="Polylin折线" />
+            <TabItem Header="Path路径" />
+        </TabControl>
+    </Grid>
+</Window>

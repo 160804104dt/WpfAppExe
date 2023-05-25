@@ -1,0 +1,81 @@
+﻿<Window
+    x:Class="WpfAppExe.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:igDp="http://infragistics.com/DataPresenter"
+    xmlns:local="clr-namespace:WpfAppExe.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mvvm="http://prismlibrary.com/"
+    xmlns:sl="clr-namespace:WpfAppExe.Selector"
+    Title="首页"
+    Width="1200"
+    Height="450"
+    mvvm:ViewModelLocator.AutoWireViewModel="True"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Grid ShowGridLines="True">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <Style TargetType="Button">
+                <Setter Property="Width" Value="80" />
+                <Setter Property="Height" Value="40" />
+                <Setter Property="Margin" Value="20,0,0,0" />
+            </Style>
+        </Grid.Resources>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button
+                Command="{Binding ClickCommand, Mode=OneWay}"
+                CommandParameter="0"
+                Content="ListBox" />
+            <Button
+                Command="{Binding ClickCommand, Mode=OneWay}"
+                CommandParameter="1"
+                Content="ListView" />
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button
+                Command="{Binding ClickCommand, Mode=OneWay}"
+                CommandParameter="2"
+                Content="DataGrid" />
+            <Button
+                Command="{Binding ClickCommand, Mode=OneWay}"
+                CommandParameter="3"
+                Content="XamDataGrid" />
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Button
+                Command="{Binding ClickCommand, Mode=OneWay}"
+                CommandParameter="4"
+                Content="Line直线" />
+            <Button
+                Command="{Binding ClickCommand, Mode=OneWay}"
+                CommandParameter="5"
+                Content="Rectangle矩形" />
+            <Button
+                Command="{Binding ClickCommand, Mode=OneWay}"
+                CommandParameter="6"
+                Content="Ellipse椭圆" />
+            <Button
+                Command="{Binding ClickCommand, Mode=OneWay}"
+                CommandParameter="7"
+                Content="Polygon多边形" />
+            <Button
+                Command="{Binding ClickCommand, Mode=OneWay}"
+                CommandParameter="8"
+                Content="Polylin折线" />
+            <Button
+                Command="{Binding ClickCommand, Mode=OneWay}"
+                CommandParameter="9"
+                Content="Path路径" />
+        </StackPanel>
+    </Grid>
+</Window>

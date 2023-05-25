@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "WpfAppExe": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    }
+  }
+}

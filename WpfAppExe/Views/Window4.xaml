@@ -1,0 +1,23 @@
+﻿<Window
+    x:Class="WpfAppExe.Views.Window4"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dp="http://infragistics.com/DataPresenter"
+    xmlns:local="clr-namespace:WpfAppExe.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mvvm="http://prismlibrary.com/"
+    Title="Window4"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+    <Grid>
+        <dp:XamDataGrid>
+            <dp:XamDataGrid.FieldLayouts>
+                <dp:FieldLayout>
+                    <dp:Field />
+                </dp:FieldLayout>
+            </dp:XamDataGrid.FieldLayouts>
+        </dp:XamDataGrid>
+    </Grid>
+</Window>
