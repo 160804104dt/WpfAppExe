@@ -19,7 +19,10 @@
             <TextBlock Text="X1是左边的竖线的起始位置，X2是右边的终点位置，Y1是左边垂直方向的偏移，Y2是右边垂直方向的偏移" />
             <TextBlock Text="Stroke是颜色，StrokeThickness是线的粗细" />
         </StackPanel>
-        <Grid Grid.Row="1" Margin="0,30,0,0" ShowGridLines="True">
+        <Grid
+            Grid.Row="1"
+            Margin="0,30,0,0"
+            ShowGridLines="True">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition />
@@ -42,14 +45,24 @@
                 Y1="5"
                 Y2="5" />
             <Line
-                VerticalAlignment="Center"
-                HorizontalAlignment="Center"
                 Grid.Row="2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
                 Stroke="Black"
                 StrokeThickness="20"
-                Y1="30"
                 X1="10"
-                X2="10"/>
+                X2="10"
+                Y1="30">
+                <Line.Style>
+                    <Style TargetType="{x:Type Line}">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Stroke" Value="AliceBlue" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Line.Style>
+            </Line>
         </Grid>
     </Grid>
 </UserControl>
