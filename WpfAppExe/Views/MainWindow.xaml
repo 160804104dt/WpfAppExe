@@ -77,5 +77,11 @@
                 CommandParameter="9"
                 Content="Path路径" />
         </StackPanel>
+        <StackPanel Grid.Row="3" Orientation="Horizontal">
+            <Button
+                Command="{Binding ClickCommand1, Mode=OneWay}"
+                CommandParameter="10"
+                Content="泛型" />
+        </StackPanel>
     </Grid>
 </Window>

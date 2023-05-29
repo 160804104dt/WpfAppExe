@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WpfAppExe.Core;
+using WpfAppExe.ViewModels.UserControls;
 using WpfAppExe.Views.UserControls;
 
 namespace WpfAppExe.ViewModels
@@ -13,10 +14,12 @@ namespace WpfAppExe.ViewModels
     {
         public ReactiveProperty<int> SelectedTabIndex { get; set; } = new ReactiveProperty<int>();
         public ListBoxUserControl listBoxUserControl { get; set; } = new ListBoxUserControl();
+        public ReactiveProperty<ListBoxUserControlViewModel> ListBoxUserControl { get; set; } = new ReactiveProperty<ListBoxUserControlViewModel>(new ListBoxUserControlViewModel());
 
         protected override void InitData()
         {
             base.InitData();
+            //Init();
             Console.WriteLine("画面数据初始化成功");
         }
 

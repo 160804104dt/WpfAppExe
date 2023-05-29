@@ -25,9 +25,9 @@ namespace DataBase.DbDto
         public string zenkai_login_date_time;
         public string zenkai_password_change_date_time;
         public string is_deleted;
-        public string created_by;
+        public int created_by;
         public DateTime created_at;
-        public string updated_by;
+        public int updated_by;
         public DateTime updated_at;
     }
 }

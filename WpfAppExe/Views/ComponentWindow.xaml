@@ -17,7 +17,7 @@
     <Grid>
         <TabControl SelectedIndex="{Binding SelectedTabIndex.Value, UpdateSourceTrigger=PropertyChanged}">
             <TabItem Header="listBox">
-                <uc:ListBoxUserControl />
+                <uc:ListBoxUserControl DataContext="{Binding ListBoxUserControl.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </TabItem>
             <TabItem Header="listView" />
             <TabItem Header="DataGrid" />

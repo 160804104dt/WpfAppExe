@@ -45,7 +45,6 @@ namespace WpfAppExe.Manager.Entity
                     if (mt.Count > 0)
                     {
                         this.AddRange(mt);
-                        string s = "";
                         return mt.Count;
                     }
                 }
