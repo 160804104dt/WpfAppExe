@@ -20,7 +20,9 @@
                 <uc:ListBoxUserControl DataContext="{Binding ListBoxUserControl.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </TabItem>
             <TabItem Header="listView" />
-            <TabItem Header="DataGrid" />
+            <TabItem Header="DataGrid">
+                <uc:DataGridUserControl DataContext="{Binding DataGridUserControl.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </TabItem>
             <TabItem Header="XamDataGrid" />
             <TabItem Header="Line直线">
                 <uc:LineUserControl />

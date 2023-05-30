@@ -13,7 +13,7 @@ namespace WpfAppExe.Utils
         /// <summary>
         /// VisualTreeを親側にたどって指定した型の要素を取得
         /// </summary>
-        public T FindAncestor<T>(DependencyObject depObj) where T : DependencyObject
+        public static T FindAncestor<T>(DependencyObject depObj) where T : DependencyObject
         {
             while (depObj != null)
             {
@@ -29,7 +29,7 @@ namespace WpfAppExe.Utils
         /// <summary>
         /// VisualTreeを子要素側にたどって指定した型の要素を取得
         /// </summary>
-        public T FindDescendant<T>(DependencyObject depObj) where T : DependencyObject
+        public static T FindDescendant<T>(DependencyObject depObj) where T : DependencyObject
         {
             if (depObj == null) { return null; }
 

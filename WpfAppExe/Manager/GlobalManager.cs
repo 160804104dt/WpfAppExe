@@ -16,11 +16,17 @@ namespace WpfAppExe.Manager
         public static void RegisterContainer()
         {
             Container.RegisterSingleton<IUserBasicInfoMDataManager, UserBasicInfoMDataManager>();
+            Container.RegisterSingleton<IHokenshaNoMDataManager,HokenshaNoMDataManager>();
         }
 
         public static IUserBasicInfoMDataManager GetUserBasicInfoMDataManager()
         {
             return Container.Resolve<IUserBasicInfoMDataManager>();
+        }
+
+        public static IHokenshaNoMDataManager GetHokenshaNoMDataManager()
+        {
+            return Container.Resolve<IHokenshaNoMDataManager>();
         }
 
     }

@@ -32,15 +32,6 @@ namespace DataBase.Service
             {
                 connection.Close();
             }
-
-            if ("之前听泡泡老师说伍泽凯小朋友上课表现非常好，上完后发现伍泽凯小朋友上课表现确实挺不错的，遵守课堂纪律，而且组装机器人的速度也非常快，继续保持就好".Equals("#"))
-            {
-                if(list.Count > 0)
-                {
-                    Console.WriteLine("这样的话就是很好了");
-                }
-            }
-
             return list;
         }
     }

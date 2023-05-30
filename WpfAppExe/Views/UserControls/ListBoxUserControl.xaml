@@ -8,15 +8,92 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid Width="600" Height="400">
+    <Grid Width="1000" Height="600">
         <ListBox ItemsSource="{Binding DataList, UpdateSourceTrigger=PropertyChanged}">
             <ListBox.ItemTemplate>
-                <DataTemplate>
+                <!--<DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding hokensha_no}" />
-                        <TextBlock Margin="10,0,0,0" Text="2" />
+                        <TextBlock Text="{Binding HokenshaNo}" />
+                        <TextBlock Margin="10,0,0,0" Text="{Binding }" />
                     </StackPanel>
-                </DataTemplate>
+                </DataTemplate>-->
+                <ItemContainerTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding HokenshaNo}" />
+                        <TextBlock
+                            Width="30"
+                            Margin="10,0,0,0"
+                            Text="{Binding HoubetsuKbn}" />
+                        <TextBlock
+                            Width="50"
+                            Margin="10,0,0,0"
+                            Text="{Binding HokenshaKanjiName}" />
+                        <TextBlock
+                            Width="50"
+                            Margin="10,0,0,0"
+                            Text="{Binding HokenshaKanjiShortName}" />
+                        <TextBlock
+                            Width="50"
+                            Margin="10,0,0,0"
+                            Text="{Binding HokenshaKanaName}" />
+                        <TextBlock
+                            Width="20"
+                            Margin="10,0,0,0"
+                            Text="{Binding PrefectureCode}" />
+                        <TextBlock
+                            Width="20"
+                            Margin="10,0,0,0"
+                            Text="{Binding KumiaiinKyuufuWariai}" />
+                        <TextBlock
+                            Width="20"
+                            Margin="10,0,0,0"
+                            Text="{Binding FamilyKyuufuWariai}" />
+                        <TextBlock
+                            Width="50"
+                            Margin="10,0,0,0"
+                            Text="{Binding PostalNo}" />
+                        <TextBlock
+                            Width="150"
+                            Margin="10,0,0,0"
+                            Text="{Binding Address1}"
+                            ToolTip="{Binding Address1}"
+                            ToolTipService.Placement="Mouse">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <Trigger Property="Text" Value="">
+                                            <Setter Property="ToolTipService.IsEnabled" Value="False" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock
+                            Width="150"
+                            Margin="10,0,0,0"
+                            Text="{Binding Address2}"
+                            ToolTip="{Binding Address2}"
+                            ToolTipService.Placement="Mouse">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <Trigger Property="Text" Value="">
+                                            <Setter Property="ToolTipService.IsEnabled" Value="False" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock
+                            Width="130"
+                            Margin="10,0,0,0"
+                            Text="{Binding PhoneNo}" />
+                        <TextBlock
+                            Width="20"
+                            Margin="10,0,0,0"
+                            Text="{Binding IdouKbn}" />
+                    </StackPanel>
+                </ItemContainerTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
     </Grid>

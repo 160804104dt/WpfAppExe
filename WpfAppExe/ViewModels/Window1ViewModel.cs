@@ -118,10 +118,9 @@ namespace WpfAppExe.ViewModels
                 IsDisplay.Value = false;
                 IsDisplay.Value = true;
 
-                VisualTreeHelperWrapperUtility visualTreeHelper = new VisualTreeHelperWrapperUtility();
                 if(o is MouseButtonEventArgs arg && arg.OriginalSource is DependencyObject dp)
                 {
-                    if(visualTreeHelper.FindAncestor<DataGridCell>(dp) is DataGridCell dataGridRow)
+                    if(VisualTreeHelperWrapperUtility.FindAncestor<DataGridCell>(dp) is DataGridCell dataGridRow)
                     {
                         SelectedPerson.Value = dataGridRow.DataContext as Person;
                     }

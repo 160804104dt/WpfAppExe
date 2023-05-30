@@ -15,6 +15,8 @@ namespace WpfAppExe.ViewModels
         public ReactiveProperty<int> SelectedTabIndex { get; set; } = new ReactiveProperty<int>();
         public ListBoxUserControl listBoxUserControl { get; set; } = new ListBoxUserControl();
         public ReactiveProperty<ListBoxUserControlViewModel> ListBoxUserControl { get; set; } = new ReactiveProperty<ListBoxUserControlViewModel>(new ListBoxUserControlViewModel());
+        public ReactiveProperty<DataGridUserControlViewModel> DataGridUserControl { get; set; } = new ReactiveProperty<DataGridUserControlViewModel>(new DataGridUserControlViewModel());
+
 
         protected override void InitData()
         {
@@ -28,7 +30,7 @@ namespace WpfAppExe.ViewModels
             base.RegisterCommands();
             SelectedTabIndex.Subscribe(o =>
             {
-
+                Console.WriteLine(SelectedTabIndex.Value);
             });
         }
     }
