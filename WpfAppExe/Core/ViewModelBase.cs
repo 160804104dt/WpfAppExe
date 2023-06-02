@@ -60,6 +60,10 @@ namespace WpfAppExe.Core
         [JsonIgnore]
         protected bool IsNotificationInitCompleted { get; set; } = true;
 
+        /// <summary>
+        /// ViewModelのWindow
+        /// </summary>
+        protected WeakReference<Window> mainWindow = null;
         #endregion
 
         #region プロパテ
@@ -83,6 +87,36 @@ namespace WpfAppExe.Core
             {
                 SetProperty(ref _isModuleActived, value);
                 if (value) ModuleActived();
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Window MainWindow
+        {
+            get
+            {
+                if (mainWindow != null)
+                {
+                    if (mainWindow.TryGetTarget(out Window window))
+                    {
+                        return window;
+                    }
+                }
+
+                return null;
+            }
+            set
+            {
+                if (mainWindow == null)
+                {
+                    mainWindow = new WeakReference<Window>(value);
+                }
+                else
+                {
+                    mainWindow.SetTarget(value);
+                }
             }
         }
 
@@ -422,228 +456,43 @@ namespace WpfAppExe.Core
 
         #endregion
 
-#if R0212_37347 // ======== Patched by WYY at 2020/11/13 13:48:49 for Redmine #37347
-
-        /// <summary>
-        /// ロードフラグ
-        /// </summary>
-        private bool _isLoaded = false;
-
-        /// <summary>
-        /// クローズフラグ
-        /// </summary>
-        private bool _isClosed = false;
-
-        /// <summary>
-        /// 画面区分
-        /// </summary>
-        public string ScreenId = string.Empty;
-
-        /// <summary>
-        /// データ更新時 アクセスログ出力
-        /// </summary>
-        public void UpdateAccessLogWrite(bool updateResult)
-        {
-            if (!string.IsNullOrEmpty(ScreenId))
-            {
-                // アクセスログ "データ更新処理を実行しました。" + "[成功]" or "[失敗]"
-                System.Threading.Tasks.Task.Run(() => Pharmacy.Common.Utilities.AuditTrailUtility.AccessLogWrite(ScreenId, Pharmacy.Common.Constant.AuditTrail.MessageEnum.DO_UPDATE, updateResult));
-            }
-        }
-
-        /// <summary>
-        /// プライマリーボタン押下時 アクセスログ出力
-        /// </summary>
-        public void PrimaryButtonAccessLogWrite()
-        {
-            if (!string.IsNullOrEmpty(ScreenId))
-            {
-                // アクセスログ "プライマリーボタンを押下しました。"
-                System.Threading.Tasks.Task.Run(() => Pharmacy.Common.Utilities.AuditTrailUtility.AccessLogWrite(ScreenId, Pharmacy.Common.Constant.AuditTrail.MessageEnum.DO_PRIMARY));
-            }
-        }
-
-        /// <summary>
-        /// セカンダリーボタン押下時 アクセスログ出力
-        /// </summary>
-        public void SecondaryButtonAccessLogWrite()
-        {
-            if (!string.IsNullOrEmpty(ScreenId))
-            {
-                // アクセスログ "セカンダリーボタンを押下しました。"
-                System.Threading.Tasks.Task.Run(() => Pharmacy.Common.Utilities.AuditTrailUtility.AccessLogWrite(ScreenId, Pharmacy.Common.Constant.AuditTrail.MessageEnum.DO_SECONDRY));
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        internal void WindowLoaded(object sender, System.Windows.RoutedEventArgs e)
-        {
-            OnWindowLoaded();
-
-            // 埋め込み型以外
-            if (!_isLoaded)
-            {
-                if (!string.IsNullOrEmpty(ScreenId))
-                {
-                    // アクセスログ "画面が表示されました。"
-                    System.Threading.Tasks.Task.Run(() => Pharmacy.Common.Utilities.AuditTrailUtility.AccessLogWrite(ScreenId, Pharmacy.Common.Constant.AuditTrail.MessageEnum.DO_SHOW));
-                }
-                _isLoaded = true;
-            }
-        }
-
-        /// <summary>
-        /// ウィンドウ終了前イベント
-        /// </summary>
-        /// <param name="sender">sender</param>
-        /// <param name="e">CancelEventArgs</param>
-        internal void WindowClosing(object sender, CancelEventArgs e)
-        {
-            OnWindowClosing(e);
-        }
-
-        /// <summary>
-        /// ウィンドウ終了イベント
-        /// </summary>
-        /// <param name="sender">sender</param>
-        /// <param name="e">EventArgs</param>
-        internal void WindowClosed(object sender, EventArgs e)
-        {
-            // 新UI修正ために Started By LJN 2022-9-15 13:02:16
-            OnWindowClosed(sender, e);
-            // 新UI修正ために Ended By LJN 2022-9-15 13:02:16
-            // 埋め込み型以外
-            if (!_isClosed)
-            {
-                if (!string.IsNullOrEmpty(ScreenId))
-                {
-                    // アクセスログ "画面を閉じました。"
-                    System.Threading.Tasks.Task.Run(() => Pharmacy.Common.Utilities.AuditTrailUtility.AccessLogWrite(ScreenId, Pharmacy.Common.Constant.AuditTrail.MessageEnum.DO_CLOSE));
-                }
-                _isClosed = true;
-            }
-        }
-
-        /// <summary>
-        /// ウィンドウイベント
-        /// </summary>
-        /// <param name="sender">sender</param>
-        /// <param name="e">EventArgs</param>
-        internal void WindowSizeChanged(object sender, EventArgs e)
-        {
-            OnWindowSizeChanged(e);
-        }
-
-        /// <summary>
-        /// ウィンドウイベント
-        /// </summary>
-        /// <param name="sender">sender</param>
-        /// <param name="e">EventArgs</param>
-        internal void WindowVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
-        {
-            OnWindowVisibleChanged(e);
-        }
-
-        /// <summary>
-        /// コンテントレンダードイベント
-        /// </summary>
-        /// <param name="sender">sender</param>
-        /// <param name="e">EventArgs</param>
-        internal void ContentRendered(object sender, EventArgs e)
-        {
-            OnContentRendered();
-        }
-
-        /// <summary>
-        /// ウィンドウロードイベント（継承先処理用）
-        /// </summary>
-        protected virtual void OnWindowLoaded()
-        {
-        }
-        /// <summary>
-        /// ウィンドウ終了前イベント（継承先処理用）
-        /// </summary>
-        /// <param name="e">CancelEventArgs</param>
-        protected virtual void OnWindowClosing(CancelEventArgs e)
-        {
-        }
-
-        /// <summary>
-        /// ウィンドウ終了イベント（継承先処理用）
-        /// </summary>
-        /// <param name="e">CancelEventArgs</param>
-        // 新UI修正ために Started By LJN 2022-9-15 13:02:16
-        protected virtual void OnWindowClosed(object sender, EventArgs e)
-        // 新UI修正ために Ended By LJN 2022-9-15 13:02:16
-        {
-        }
-
-        /// <summary>
-        /// ウィンドウサイズ変更イベント（継承先処理用）
-        /// </summary>
-        /// <param name="e">EventArgs</param>
-        protected virtual void OnWindowSizeChanged(EventArgs e)
-        {
-        }
-
-        /// <summary>
-        /// ウィンドウ表示変更イベント（継承先処理用）
-        /// </summary>
-        /// <param name="e">EventArgs</param>
-        protected virtual void OnWindowVisibleChanged(System.Windows.DependencyPropertyChangedEventArgs e)
-        {
-        }
-
-        /// <summary>
-        /// コンテントレンダードイベント（継承先処理用）
-        /// 注）UserControl では GotFocus によるトリガ
-        /// </summary>
-        protected virtual void OnContentRendered()
-        {
-        }
-        /// <summary>
-        /// OutputMessage
-        /// </summary>
-        /// <param name="key">定義メッセージの Key 値（例："PMCI_000001"）</param>
-        /// <param name="parameters">追加文字列</param>
-        /// <returns>ダイアログの処理結果</returns>
-        protected EnumMessageBoxResult OutputMessage(string key, params string[] parameters)
-        {
-            return OutputMessage(key, IntPtr.Zero, parameters);
-        }
-        protected EnumMessageBoxResult OutputMessage(string key, IntPtr hWnd, params string[] parameters)
-        {
-
-            // メッセージ取得
-            var msgVal = MessageManager.Messages[key];
-
-            if (msgVal == null)
-            {
-                // メッセージ未定義（ClientErrXXXX で代用）
-                msgVal = MessageManager.Messages["ClientErrXXXX"];
-                return EnumMessageBoxResult.OK;
-            }
-
-            string messageBody = string.Format(msgVal.Text, parameters);
-
-            return EmpMessage.Show(msgVal.Icon, msgVal.Title, messageBody, msgVal.ButtonType, null, msgVal.DefaultKey, hWnd);
-        }
-
-#endif
-
-        // 新UI修正ために Started By SLM 2022-6-15 17:11:13		
-        /// <summary>×ボタンを押した時に閉じれるかどうか</summary>
-        /// <returns>
-        ///   <c>true</c> if this instance can close; otherwise, <c>false</c>.
-        /// </returns>
         public virtual bool CanClose()
         {
             return true;
         }
-        // 新UI修正ために Ended By SLM 2022-6-15 17:11:13		
+
+        public List<T> GetControlList<T>()
+        {
+            var window = GetWindow();
+            if (window != null)
+            {
+
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 画面を取得する
+        /// </summary>
+        public virtual Window GetWindow()
+        {
+            if (MainWindow != null)
+            {
+                return MainWindow;
+            }
+
+            var windows = Application.Current.Windows;
+            for (int i = 0; i < windows.Count; i++)
+            {
+                Window win = windows[i];
+                if (win.DataContext is ViewModelBase vm && vm == this)
+                {
+                    return win;
+                }
+            }
+
+            return null;
+        }
+
     }
 }

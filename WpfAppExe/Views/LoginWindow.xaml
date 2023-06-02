@@ -13,7 +13,7 @@
     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     Title="用户登录"
     Width="600"
-    Height="800"
+    Height="300"
     mvvm:ViewModelLocator.AutoWireViewModel="True"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen"
@@ -48,7 +48,7 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="300" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="100" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>

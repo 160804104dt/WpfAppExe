@@ -29,6 +29,8 @@
                 <Setter Property="Width" Value="80" />
                 <Setter Property="Height" Value="40" />
                 <Setter Property="Margin" Value="20,0,0,0" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
             </Style>
         </Grid.Resources>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
@@ -79,9 +81,51 @@
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal">
             <Button
-                Command="{Binding ClickCommand1, Mode=OneWay}"
+                Command="{Binding GenericCommand, Mode=OneWay}"
                 CommandParameter="10"
                 Content="泛型" />
+        </StackPanel>
+        <StackPanel Grid.Row="4" Orientation="Horizontal">
+            <Button
+                Command="{Binding SortCommand, Mode=OneWay}"
+                CommandParameter="1"
+                Content="冒泡排序" />
+            <Button
+                Command="{Binding SortCommand, Mode=OneWay}"
+                CommandParameter="2"
+                Content="插入排序" />
+            <Button
+                Command="{Binding SortCommand, Mode=OneWay}"
+                CommandParameter="3"
+                Content="选择排序" />
+            <Button
+                Command="{Binding SortCommand, Mode=OneWay}"
+                CommandParameter="4"
+                Content="快速排序" />
+            <Button
+                Command="{Binding SortCommand, Mode=OneWay}"
+                CommandParameter="5"
+                Content="希尔排序" />
+            <Button
+                Command="{Binding SortCommand, Mode=OneWay}"
+                CommandParameter="6"
+                Content="堆排序" />
+            <Button
+                Command="{Binding SortCommand, Mode=OneWay}"
+                CommandParameter="7"
+                Content="归并排序" />
+            <Button
+                Command="{Binding SortCommand, Mode=OneWay}"
+                CommandParameter="8"
+                Content="基数排序" />
+            <Button
+                Command="{Binding SortCommand, Mode=OneWay}"
+                CommandParameter="9"
+                Content="计数排序" />
+            <Button
+                Command="{Binding SortCommand, Mode=OneWay}"
+                CommandParameter="10"
+                Content="桶排序" />
         </StackPanel>
     </Grid>
 </Window>
