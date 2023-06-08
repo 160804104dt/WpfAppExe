@@ -34,8 +34,6 @@ namespace WpfAppExe.ViewModels
         public ReactiveCommand PreviewKeyDownCommand { get; set; } = new ReactiveCommand();
         #endregion
 
-        unsafe int a = 51;
-
         #region Property
         public ReactivePropertySlim<string> UserName { get; set; } = new ReactivePropertySlim<string>();
         public ReactivePropertySlim<string> Password { get; set; } = new ReactivePropertySlim<string>();

@@ -1,0 +1,82 @@
+VS快捷键
+ctrl+F                          查找
+ctrl+S                          保存
+ctrl+H                          替换
+ctrl+A                          全选
+ctrl+C                          复制
+ctrl+V                          粘贴
+ctrl+X                          剪切
+ctrl+Z                          退回上一步操作
+ctrl+Y                          取消上一步退回操作
+ctrl+D                          复制光标所在的行 ?
+ctrl+G                          跳转到指定行
+ctrl+Shift+U    		字母变成大写
+ctrl+U    			字母变成小写
+ctrl+Enter    			当前行插入空白行
+Ctrl+Delete    			删除光标右侧字
+Ctrl+Shift+L			删除当前行
+Ctrl+K+C			注释光标选中的行
+Ctrl+K+U			取消光标选中的行的注释
+Ctrl+K+D/Ctrl+E+F/Ctrl+E+D/Ctrl+K+F	VS代码格式化快捷键
+
+F5    					调试
+F10					调试单步执行
+F11					逐语句调试
+F5 					开始调试
+Shift+F5				停止调试
+Ctrl+F5    				开始执行(不调试)
+F9 					设置或删除断点
+Ctrl + Alt + P 				附加到进程
+CTRL + SHIFT + END			选择至文档末尾
+CTRL + SHIFT + HOME			选择至文档开始
+Shift+End    				从头到尾选择
+Shift+Home   				从尾到头选择
+CTRL + END				文档定位到最后
+CTRL + HOME				文档定位到最前
+Ctrl+M,M:				隐藏或展开当前嵌套的折叠状态
+Ctrl+M,L: 				将所有过程设置为相同的隐藏或展开状态
+Shift+Alt+箭头键			选择矩形文本
+Alt+鼠标左按钮				选择矩形文本
+
+idea快捷键
+Ctrl + Y				删除当前行																			
+Ctrl + D			    	复制当前行，直接在下一行复制出当前行													
+Ctrl + W				选中文本，连续按可以扩大选中范围（以单词为单位）											
+Ctrl + Enter				在当前行上面插入一行空行。注意：需要在行首使用该快捷键									
+Ctrl + Backspace        		删除单词，可以一下字删除整个单词														
+Ctrl + " + / -"				将当前方法块代码展开 / 折叠															
+Ctrl + /				添加注释和取消注释，【第一次是添加注释，第二次是取消注释】									
+Ctrl + shift + /			添加/取消多行注释，【第一次是添加注释，第二次是取消注释】									
+Ctrl + F				在当前文件中查找文本																	
+Ctrl + R				查找并替换文本，支持多行查找，或者只在代码中查找，或者只在注释中查找，或者使用正则表达式查找
+Ctrl + O				快速重写基类或者接口中的方法															
+Ctrl + 空格				提示代码，在输入代码时可以提示关键字													
+Ctrl + J				提示代码，在输入代码时可以提示快捷键													
+Ctrl + H				显示类结构图（类的继承层次）															
+Ctrl + G				快速定位到指定行指定列																
+Ctrl + [ 				快速定位到代码块开始位置	
+Ctrl + ] 				快速定位到代码块结束位置	
+Ctrl + N				快速搜索和打开类	
+Ctrl + B 				快速定位源码
+Ctrl + U				快速转到当前类的父类
+
+Alt + /					快速补全代码		
+Alt+Q					显示当前方法的声明		
+Alt + Enter				在代码可能存在语法问题时，IDEA 会提示使用该快捷键可以快速自动修正
+Alt + insert				快速生成含有任意形参的构造器			
+Alt + 1					快速打开或隐藏 Project 面板	
+Alt + 7					快速显示类结构，可以显示类中包含的所有属性和方法	
+Alt + left / right			快速切换代码视图									
+Alt + Up / Down				在方法间快速移动定位（即光标以方法为单位移动）		
+
+Shift + Enter				在当前行下面生成一行空行，光标自动移到空行行首	
+F2 或 Shift + F2			快速定位高亮错误或警告位置	
+
+Ctrl + Shift + 向上/下箭头		将光标所在的代码块向上/下整体移动	
+Ctrl + Shift + F10			快速运行当前的程序，当前你在哪个程序就运行该程序	
+Ctrl + Shift + /			添加/取消多行注释，【第一次是添加注释，第二次是取消注释】	
+Ctrl + Shift + J			快速整合两行代码，将光标所在行和下一行的代码合并成一行	
+psvm/ main　　　　　			快速生成主函数
+sout					快速生成打印语句
+fori / itar				快速生成普通 for 循环
+iter　　　　　　　　　　　　　　　　　　快速生成增强 for循环
