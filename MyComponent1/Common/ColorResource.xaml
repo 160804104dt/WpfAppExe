@@ -63,7 +63,11 @@
         options:Freeze="True"
         Color="#FFFFFF" />
     <SolidColorBrush
-        x:Key="EmpdHotKey.Foreground.Default"
+        x:Key="Common.Green_CBF5F5"
+        options:Freeze="true"
+        Color="#CBF5F5" />
+    <SolidColorBrush
+        x:Key="Common.Gray217"
         options:Freeze="True"
-        Color="AliceBlue" />
+        Color="#d9dbdb" />
 </ResourceDictionary>

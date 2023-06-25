@@ -6,95 +6,314 @@
     xmlns:local="clr-namespace:WpfAppExe.Views.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DesignWidth="1000"
     mc:Ignorable="d">
-    <Grid Width="1000" Height="600">
-        <ListBox ItemsSource="{Binding DataList, UpdateSourceTrigger=PropertyChanged}">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MyComponent1;component/Common/ColorResource.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MyComponent1;component/Style/ListBox.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid
+        Width="940"
+        Margin="0,30,0,0"
+        VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition />
+            <RowDefinition Height="41" />
+            <RowDefinition Height="60" />
+        </Grid.RowDefinitions>
+        <StackPanel
+            Grid.Row="0"
+            Height="25"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Orientation="Horizontal">
+            <Border
+                Width="32"
+                Height="25"
+                Background="CadetBlue"
+                BorderBrush="Gray"
+                BorderThickness="1,0,1,0" />
+            <Border
+                Width="79"
+                Height="25"
+                Background="CadetBlue"
+                BorderBrush="Gray"
+                BorderThickness="0,0,1,0">
+                <TextBlock Text="保険者番号" />
+            </Border>
+            <Border
+                Width="80"
+                Height="25"
+                Background="CadetBlue"
+                BorderBrush="Gray"
+                BorderThickness="0,0,1,0">
+                <TextBlock Text="保険者漢字名" />
+            </Border>
+            <Border
+                Width="90"
+                Height="25"
+                Background="CadetBlue"
+                BorderBrush="Gray"
+                BorderThickness="0,0,1,0">
+                <TextBlock Text="保険者漢字略名" />
+            </Border>
+            <Border
+                Width="90"
+                Height="25"
+                Background="CadetBlue"
+                BorderBrush="Gray"
+                BorderThickness="0,0,1,0">
+                <TextBlock Text="保険者カナ名" />
+            </Border>
+            <Border
+                Width="50"
+                Height="25"
+                Background="CadetBlue"
+                BorderBrush="Gray"
+                BorderThickness="0,0,1,0">
+                <TextBlock Text="郵便番号" />
+            </Border>
+            <Border
+                Width="200"
+                Height="25"
+                Background="CadetBlue"
+                BorderBrush="Gray"
+                BorderThickness="0,0,1,0">
+                <TextBlock Text="住所１" />
+            </Border>
+            <Border
+                Width="200"
+                Height="25"
+                Background="CadetBlue"
+                BorderBrush="Gray"
+                BorderThickness="0,0,1,0">
+                <TextBlock Text="住所２" />
+            </Border>
+            <Border
+                Width="100"
+                Height="25"
+                Background="CadetBlue"
+                BorderBrush="Gray"
+                BorderThickness="0,0,1,0">
+                <TextBlock Text="電話番号" />
+            </Border>
+            <Border
+                Width="20"
+                Height="25"
+                Background="CadetBlue"
+                BorderBrush="Gray"
+                BorderThickness="0,0,1,0" />
+        </StackPanel>
+        <ListBox
+            Grid.Row="1"
+            Height="604"
+            VerticalAlignment="Top"
+            ItemsSource="{Binding DataList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            KeyboardNavigation.TabNavigation="Cycle"
+            ScrollViewer.CanContentScroll="True"
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            VirtualizingPanel.IsVirtualizing="True">
             <ListBox.ItemTemplate>
-                <!--<DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding HokenshaNo}" />
-                        <TextBlock Margin="10,0,0,0" Text="{Binding }" />
+                <DataTemplate>
+                    <StackPanel Height="25" Orientation="Horizontal">
+                        <Border
+                            Name="Bd"
+                            Width="29"
+                            Height="25"
+                            BorderBrush="{StaticResource Common.Gray217}"
+                            BorderThickness="0,0,0,1" />
+                        <Border
+                            Width="80"
+                            Height="25"
+                            BorderBrush="{StaticResource Common.Gray217}"
+                            BorderThickness="0,0,1,1">
+                            <TextBlock
+                                Margin="5,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Foreground="Black"
+                                Text="{Binding HokenshaNo}"
+                                ToolTip="{Binding HokenshaNo}"
+                                ToolTipService.Placement="Mouse" />
+                        </Border>
+                        <Border
+                            Width="80"
+                            BorderBrush="{StaticResource Common.Gray217}"
+                            BorderThickness="0,0,1,1">
+                            <TextBlock
+                                Text="{Binding HokenshaKanjiName}"
+                                ToolTip="{Binding HokenshaKanjiName}"
+                                ToolTipService.Placement="Mouse" />
+                        </Border>
+                        <Border
+                            Width="90"
+                            BorderBrush="{StaticResource Common.Gray217}"
+                            BorderThickness="0,0,1,1">
+                            <TextBlock
+                                Text="{Binding HokenshaKanjiShortName}"
+                                ToolTip="{Binding HokenshaKanjiShortName}"
+                                ToolTipService.Placement="Mouse" />
+                        </Border>
+                        <Border
+                            Width="90"
+                            BorderBrush="{StaticResource Common.Gray217}"
+                            BorderThickness="0,0,1,1">
+                            <TextBlock
+                                Text="{Binding HokenshaKanaName}"
+                                ToolTip="{Binding HokenshaKanaName}"
+                                ToolTipService.Placement="Mouse" />
+                        </Border>
+                        <Border
+                            Width="50"
+                            BorderBrush="{StaticResource Common.Gray217}"
+                            BorderThickness="0,0,1,1">
+                            <TextBlock
+                                Text="{Binding PostalNo}"
+                                ToolTip="{Binding PostalNo}"
+                                ToolTipService.Placement="Mouse" />
+                        </Border>
+                        <Border
+                            Width="200"
+                            BorderBrush="{StaticResource Common.Gray217}"
+                            BorderThickness="0,0,1,1">
+                            <TextBlock
+                                Margin="10,0,0,0"
+                                Text="{Binding Address1}"
+                                ToolTip="{Binding Address1}"
+                                ToolTipService.Placement="Mouse">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <Trigger Property="Text" Value="">
+                                                <Setter Property="ToolTipService.IsEnabled" Value="False" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Border>
+                        <Border
+                            Width="200"
+                            BorderBrush="{StaticResource Common.Gray217}"
+                            BorderThickness="0,0,1,1">
+                            <TextBlock
+                                Margin="10,0,0,0"
+                                Text="{Binding Address2}"
+                                ToolTip="{Binding Address2}"
+                                ToolTipService.Placement="Mouse">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <Trigger Property="Text" Value="">
+                                                <Setter Property="ToolTipService.IsEnabled" Value="False" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Border>
+                        <Border
+                            Width="100"
+                            BorderBrush="{StaticResource Common.Gray217}"
+                            BorderThickness="0,0,1,1">
+                            <TextBlock
+                                Text="{Binding PhoneNo}"
+                                ToolTip="{Binding PhoneNo}"
+                                ToolTipService.Placement="Mouse" />
+                        </Border>
                     </StackPanel>
-                </DataTemplate>-->
-                <ItemContainerTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding HokenshaNo}" />
-                        <TextBlock
-                            Width="30"
-                            Margin="10,0,0,0"
-                            Text="{Binding HoubetsuKbn}" />
-                        <TextBlock
-                            Width="50"
-                            Margin="10,0,0,0"
-                            Text="{Binding HokenshaKanjiName}" />
-                        <TextBlock
-                            Width="50"
-                            Margin="10,0,0,0"
-                            Text="{Binding HokenshaKanjiShortName}" />
-                        <TextBlock
-                            Width="50"
-                            Margin="10,0,0,0"
-                            Text="{Binding HokenshaKanaName}" />
-                        <TextBlock
-                            Width="20"
-                            Margin="10,0,0,0"
-                            Text="{Binding PrefectureCode}" />
-                        <TextBlock
-                            Width="20"
-                            Margin="10,0,0,0"
-                            Text="{Binding KumiaiinKyuufuWariai}" />
-                        <TextBlock
-                            Width="20"
-                            Margin="10,0,0,0"
-                            Text="{Binding FamilyKyuufuWariai}" />
-                        <TextBlock
-                            Width="50"
-                            Margin="10,0,0,0"
-                            Text="{Binding PostalNo}" />
-                        <TextBlock
-                            Width="150"
-                            Margin="10,0,0,0"
-                            Text="{Binding Address1}"
-                            ToolTip="{Binding Address1}"
-                            ToolTipService.Placement="Mouse">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <Trigger Property="Text" Value="">
-                                            <Setter Property="ToolTipService.IsEnabled" Value="False" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                        <TextBlock
-                            Width="150"
-                            Margin="10,0,0,0"
-                            Text="{Binding Address2}"
-                            ToolTip="{Binding Address2}"
-                            ToolTipService.Placement="Mouse">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <Trigger Property="Text" Value="">
-                                            <Setter Property="ToolTipService.IsEnabled" Value="False" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                        <TextBlock
-                            Width="130"
-                            Margin="10,0,0,0"
-                            Text="{Binding PhoneNo}" />
-                        <TextBlock
-                            Width="20"
-                            Margin="10,0,0,0"
-                            Text="{Binding IdouKbn}" />
-                    </StackPanel>
-                </ItemContainerTemplate>
+                </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="IsHitTestVisible" Value="True" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <Border x:Name="outbd" Background="{StaticResource Common.White}">
+                                    <Grid>
+                                        <Border
+                                            Name="ArrowBorder"
+                                            Width="30"
+                                            Height="25"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Background="#F2F2F2">
+                                            <TextBlock
+                                                x:Name="ArrowText"
+                                                Margin="8,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                Foreground="{StaticResource Common.White}"
+                                                Text="▶"
+                                                Visibility="Collapsed" />
+                                        </Border>
+                                        <Rectangle
+                                            x:Name="bd"
+                                            Panel.ZIndex="2"
+                                            Stroke="{StaticResource Common.Green_008485}"
+                                            StrokeThickness="1"
+                                            Visibility="Hidden" />
+                                        <ContentPresenter />
+                                    </Grid>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="bd" Property="Visibility" Value="Visible" />
+                                        <Setter TargetName="outbd" Property="Background" Value="{StaticResource Common.Green_CBF5F5}" />
+                                        <Setter TargetName="ArrowText" Property="Visibility" Value="Visible" />
+                                        <Setter TargetName="ArrowBorder" Property="Background" Value="{StaticResource Common.Green_008485}" />
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="outbd" Property="Background" Value="#FFE3D5" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
         </ListBox>
+        <DockPanel Grid.Row="2" Margin="0,1,0,0">
+            <Button
+                Width="100"
+                HorizontalAlignment="Left"
+                Command="{Binding SortAscCommand}"
+                Content="保険者番号升序" />
+            <Button
+                Width="100"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                Command="{Binding SortDescCommand}"
+                Content="保険者番号降序" />
+            <Button
+                Width="80"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                Command="{Binding GroupCommand}"
+                Content="保険者分组" />
+            <Button
+                Width="80"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                Command="{Binding FindCommand}"
+                Content="关键词查找" />
+        </DockPanel>
+        <TextBox
+            Grid.Row="3"
+            Width="80"
+            Height="20"
+            Margin="10,0,0,0"
+            HorizontalAlignment="Left"
+            Text="{Binding SearchName.Value}" />
     </Grid>
+
 </UserControl>

@@ -1,2 +1,5 @@
 十大常用经典排序算法总结
 https://blog.csdn.net/weixin_42711189/article/details/116351162
+
+C#——Linq详解
+https://blog.csdn.net/weixin_45756851/article/details/126163607

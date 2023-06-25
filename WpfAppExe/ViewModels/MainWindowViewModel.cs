@@ -1,8 +1,12 @@
-﻿using Prism.Mvvm;
+﻿using DataBase.DbDto;
+using Newtonsoft.Json;
+using Npgsql;
+using Prism.Mvvm;
 using Reactive.Bindings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -16,10 +20,12 @@ namespace WpfAppExe.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         public ReactiveCommand ClickCommand { get; set; } = new ReactiveCommand();
-        public ReactiveCommand GenericCommand { get; set; } = new ReactiveCommand();
+        public ReactiveCommand Row4Command { get; set; } = new ReactiveCommand();
         public ReactiveCommand SortCommand { get; set; } = new ReactiveCommand();
 
-        int[] array = new int[11] {5,3,7,6,4,1,0,2,9,10,8};
+        int[] array = new int[11] { 5, 3, 7, 6, 4, 1, 0, 2, 9, 10, 8 };
+
+        public List<HokenshaNoMDto> LinqTestList = new List<HokenshaNoMDto>();
 
         /// <summary>
         /// 冒泡排序
@@ -62,6 +68,12 @@ namespace WpfAppExe.ViewModels
         /// </summary>
         public int[] BucketSortArrays = new int[10000];
 
+        protected override void InitData()
+        {
+            base.InitData();
+            Init();
+        }
+
         protected override void RegisterCommands()
         {
             base.RegisterCommands();
@@ -69,60 +81,103 @@ namespace WpfAppExe.ViewModels
             ClickCommand.Subscribe(o =>
             {
                 ComponentWindow componentWindow = new ComponentWindow();
-                if(componentWindow.DataContext is ComponentWindowViewModel vm)
+                if (componentWindow.DataContext is ComponentWindowViewModel vm)
                 {
                     vm.SelectedTabIndex.Value = Convert.ToInt32((o as string));
                 }
                 componentWindow.ShowDialog();
             });
 
-            GenericCommand.Subscribe(o =>
+            Row4Command.Subscribe(o =>
             {
-                int value = 1234;
-                long commonSecond = 0;
-                long objectSecond = 0;
-                long genericSecond = 0;
-
-                Stopwatch stopwatch1 = new Stopwatch();
-                Stopwatch stopwatch2 = new Stopwatch();
-                Stopwatch stopwatch3 = new Stopwatch();
-                stopwatch1.Start();
-                for(int i = 0; i < 100000000; i++)
+                if (o is string selectedIndex)
                 {
-                    Test(value);
+                    switch (selectedIndex)
+                    {
+                        case "1":
+                            int value = 1234;
+                            long commonSecond = 0;
+                            long objectSecond = 0;
+                            long genericSecond = 0;
+
+                            Stopwatch stopwatch1 = new Stopwatch();
+                            Stopwatch stopwatch2 = new Stopwatch();
+                            Stopwatch stopwatch3 = new Stopwatch();
+                            stopwatch1.Start();
+                            for (int i = 0; i < 100000000; i++)
+                            {
+                                Test(value);
+                            }
+                            stopwatch1.Stop();
+                            commonSecond = stopwatch1.ElapsedMilliseconds;
+
+                            stopwatch2.Start();
+                            for (int i = 0; i < 100000000; i++)
+                            {
+                                TestObject(value);
+                            }
+                            stopwatch2.Stop();
+                            objectSecond = stopwatch2.ElapsedMilliseconds;
+
+                            stopwatch3.Start();
+                            for (int i = 0; i < 100000000; i++)
+                            {
+                                Test<int>(value);
+                            }
+                            stopwatch3.Stop();
+                            genericSecond = stopwatch3.ElapsedMilliseconds;
+
+                            MessageBox.Show(commonSecond.ToString() + "\n" + objectSecond.ToString() + "\n" + genericSecond.ToString());
+
+                            Test1<Stopwatch>(new Stopwatch());
+
+                            Class1 class1 = new Class1(3);
+
+                            Test2<Class1>(class1);
+                            break;
+                        case "2":
+                            //升序
+                            List<HokenshaNoMDto> list1 = LinqTestList.OrderBy(x => x.HokenshaNo).ToList();
+                            //降序
+                            List<HokenshaNoMDto> list2 = LinqTestList.OrderByDescending(x => x.HokenshaNo).ToList();
+                            //分组
+                            var grp = LinqTestList.OrderBy(x => x.HokenshaNo).GroupBy(x => x.HokenshaKanjiName).ToList();//list类型
+                            Dictionary<string, List<HokenshaNoMDto>> grp1 = LinqTestList.OrderBy(x => x.HokenshaNo).GroupBy(x => x.HokenshaKanjiName).ToDictionary(x => x.Key, x => x.ToList());//字典类型
+                            //查找
+                            LinqTestList.Find(x => x.PostalNo.Contains("22"));//符合条件的第一个元素
+                            LinqTestList.FindLast(x => x.PostalNo.Contains("22"));//符合条件的最后一个元素
+                            LinqTestList.FindAll(x => x.PostalNo.Contains("444")).OrderByDescending(x => x.HokenshaNo);//符合条件的所有元素
+                            LinqTestList.FindIndex(x => x.PostalNo.Contains("22"));//符合条件的第一个下标
+                            LinqTestList.FindLastIndex(x => x.PostalNo.Contains("22"));//符合条件的最后一个下标
+                            //投影
+                            List<HokenshaNoMDto> list3 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("300")).ToList();//查找
+                            List<HokenshaNoMDto> list4 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("300")).ToList();//where
+                            List<HokenshaNoMDto> list5 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("300")).ToList();//where
+                            List<HokenshaNoMDto> list6 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("300")).ToList();//where
+                            List<HokenshaNoMDto> list7 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("300")).ToList();//where
+                            List<HokenshaNoMDto> list8 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("300")).ToList();//where
+                            List<HokenshaNoMDto> list9 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("300")).ToList();//where
+                            List<HokenshaNoMDto> list10 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("300")).ToList();//where
+                            break;
+                        case "3":
+                            delegate1 d1 = new delegate1(d1Func);
+                            d1.Invoke(3, 2); //显式委托
+
+                            d1NoName.Invoke(5, 5);//匿名委托
+
+                            d1Lambda.Invoke(3, 3);//lambda表达式
+
+                            delegate2 d2 = new delegate2(d2Func);
+                            d2.Invoke();
+                            break;
+                    }
                 }
-                stopwatch1.Stop();
-                commonSecond = stopwatch1.ElapsedMilliseconds;
-
-                stopwatch2.Start();
-                for (int i = 0; i < 100000000; i++)
-                {
-                    TestObject(value);
-                }
-                stopwatch2.Stop();
-                objectSecond = stopwatch2.ElapsedMilliseconds;
-
-                stopwatch3.Start();
-                for (int i = 0; i < 100000000; i++)
-                {
-                    Test<int>(value);
-                }
-                stopwatch3.Stop();
-                genericSecond = stopwatch3.ElapsedMilliseconds;
-
-                MessageBox.Show(commonSecond.ToString()+"\n"+ objectSecond.ToString() + "\n" + genericSecond.ToString());
-
-                Test1<Stopwatch>(new Stopwatch());
-
-                Class1 class1 = new Class1(3);
-
-                Test2<Class1>(class1);
             });
 
             SortCommand.Subscribe(o =>
             {
                 Random random = new Random();
-                if(o is string index)
+                if (o is string index)
                 {
                     switch (index)
                     {
@@ -158,7 +213,7 @@ namespace WpfAppExe.ViewModels
                             }
                             Stopwatch stopwatch = new Stopwatch();
                             stopwatch.Start();
-                            QuickSort(QuickSortArrays,0,QuickSortArrays.Length-1);
+                            QuickSort(QuickSortArrays, 0, QuickSortArrays.Length - 1);
                             stopwatch.Stop();
                             System.Diagnostics.Debug.WriteLine(stopwatch.ElapsedMilliseconds);
                             Print(QuickSortArrays);
@@ -239,7 +294,7 @@ namespace WpfAppExe.ViewModels
         }
 
         //new表示参数必须有无参构造函数
-        private void Test2<T>(T a)where T : new()
+        private void Test2<T>(T a) where T : new()
         {
 
         }
@@ -269,16 +324,16 @@ namespace WpfAppExe.ViewModels
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             ShowBusyIndicator();
-            for(int i = 0; i < arrays.Length; i++)
+            for (int i = 0; i < arrays.Length; i++)
             {
                 bool flag = true;
-                for(int j = 1;j< arrays.Length - i; j++)
+                for (int j = 1; j < arrays.Length - i; j++)
                 {
-                    if(arrays[j-1] > arrays[j])
+                    if (arrays[j - 1] > arrays[j])
                     {
                         flag = false;
-                        int temp = arrays[j-1];
-                        arrays[j-1] = arrays[j];
+                        int temp = arrays[j - 1];
+                        arrays[j - 1] = arrays[j];
                         arrays[j] = temp;
                     }
                 }
@@ -292,7 +347,7 @@ namespace WpfAppExe.ViewModels
         }
         /// <summary>
         /// 插入排序
-        /// 将前i个数据（初始为1）假定为有序序列，依次遍历数据，将当前数据插入到前述有序序列的适当位置，形成前i+1个有序序列，依次遍历完所有数据，直到所有数据有序
+        /// 将前i个数据（初始为1）假定为有序序列，依次遍历数据，将当前数据插入到前述有序序列的适当位置，形成前i+1个有序序列，依次遍历完所有数据，直到所有数据有序，适合部分有序的数列
         /// 数据反序，时间耗时O(n2)，正序时，时间耗时O(n)
         /// 平均时间复杂度O(n2)，空间复杂度O(1)
         /// 稳定排序
@@ -318,12 +373,12 @@ namespace WpfAppExe.ViewModels
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            for(int i = 0; i < arrays.Length - 1; i++)
+            for (int i = 0; i < arrays.Length - 1; i++)
             {
                 int k = i;
-                for(int j = i+1; j < arrays.Length; j++)
+                for (int j = i + 1; j < arrays.Length; j++)
                 {
-                    if(arrays[j] < arrays[k])
+                    if (arrays[j] < arrays[k])
                         k = j;
                 }
                 if (k != i)
@@ -348,26 +403,26 @@ namespace WpfAppExe.ViewModels
         /// 不稳定排序
         /// </summary>
         /// <param name="arrays"></param>
-        private void QuickSort(int[] arrays,int left,int right)
+        private void QuickSort(int[] arrays, int left, int right)
         {
             if (left > right)
                 return;
-            int middle = Quick_Sort(arrays,left,right);
-            QuickSort(arrays, left, middle-1);
+            int middle = Quick_Sort(arrays, left, right);
+            QuickSort(arrays, left, middle - 1);
             QuickSort(arrays, middle + 1, right);
         }
 
-        private int Quick_Sort(int[] data,int left,int right)
+        private int Quick_Sort(int[] data, int left, int right)
         {
             int key = data[left];
-            while(left < right)
+            while (left < right)
             {
                 //从后向前遍历，大于基准值的放在右边
-                while (data[right] > key && right>left)
+                while (data[right] > key && right > left)
                     right--;
                 data[left] = data[right];
                 //从前向后遍历，小于基准值的放在左边
-                while(data[left] < key && right>left)
+                while (data[left] < key && right > left)
                     left++;
                 data[right] = data[left];
             }
@@ -462,6 +517,119 @@ namespace WpfAppExe.ViewModels
                     System.Diagnostics.Debug.WriteLine("");
             }
         }
+
+
+
+        #region Linq
+        public void Init()
+        {
+            string connStr = "server=192.168.0.169;username=postgres;password=postgres;database=APPLICATION";
+            NpgsqlConnection connection = new NpgsqlConnection(connStr);
+            try
+            {
+                connection.Open();
+                string commandStr = "select * from common.hokensha_no_m";
+                NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(commandStr, connection);
+                DataTable dataTable = new DataTable();
+                adapter.Fill(dataTable);
+                if (dataTable == null || dataTable.Rows.Count == 0)
+                    return;
+                var res = JsonConvert.SerializeObject(dataTable);
+                var mt = JsonConvert.DeserializeObject<List<HokenshaNoMDto>>(res);
+                mt.ForEach(o =>
+                {
+                    LinqTestList.Add(o);
+                });
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+        #endregion
+
+
+        #endregion
+
+        #region 委托,使用委托时可以直接用，也可以用invoke方法
+
+        /// <summary>
+        /// 显式委托的定义: delegate 返回类型 委托名称(参数1,参数2......)
+        /// 具体使用时，需要传入一个函数(或者委托)作为参数
+        /// 匿名委托不用定义委托的名称
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+
+        //委托定义
+        delegate string delegate1(int a, int b);
+        //具体调用函数
+        private string d1Func(int a, int b)
+        {
+            return (a + b).ToString();
+        }
+        //Func委托
+        Func<int, int, string> f1 = new Func<int, int, string>((int a, int b) =>
+        {
+            return (a + b).ToString();
+        });
+
+        /// <summary>
+        /// 匿名委托，没有传入具体的函数或者委托
+        /// </summary>
+        delegate1 d1NoName = delegate (int a, int b) { return (a + b).ToString(); };
+        /// <summary>
+        /// lambda表达式创建委托变量
+        /// </summary>
+        delegate1 d1Lambda = (a, b) => { return (a + b).ToString(); };
+
+        /// <summary>
+        /// 无参数，无返回值的委托
+        /// </summary>
+        delegate void delegate2();
+        private void d2Func()
+        {
+            Console.WriteLine("12345");
+        }
+
+        Action a1 = () =>
+        {
+            Console.WriteLine("12345");
+        };
+
+        #region Action委托 Action委托没有返回类型
+        //几种定义方式
+        /// <summary>
+        /// 显式定义
+        /// </summary>
+        Action action1 = new Action(() =>
+        {
+            Console.WriteLine(3);
+        });
+
+        //lambda表达式定义（只有一行时，括号可以省略）
+        Action action2 = () =>
+        {
+            Console.WriteLine(3);
+        };
+        Action action3 = () => Console.WriteLine(3);
+
+        /// <summary>
+        /// 有参数的定义
+        /// </summary>
+        Action<int, int> action4 = new Action<int, int>((a, b) =>
+        {
+            Console.WriteLine(a+b);
+        });
+
+        Action<int, int> action5 = (a, b) => Console.WriteLine(a + b);
+
+        #endregion
+
+        #region Func委托 Func委托有返回类型
+        #endregion
+
         #endregion
     }
 
