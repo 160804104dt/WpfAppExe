@@ -51,7 +51,10 @@ namespace WpfAppExe.ViewModels
             base.InitData();
             byte a = 255;
             byte b = 22;
-            a += 5;
+            byte c = (byte)(a + b);
+            int d = a + b;
+            int e = a + 2;
+            int f = (byte)(a + 2);
             System.Diagnostics.Debug.WriteLine(a);
 
             int d1;

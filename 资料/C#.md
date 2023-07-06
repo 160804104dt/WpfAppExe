@@ -35,43 +35,88 @@ Console.WriteLine($"    was {weatherData.LowTemp} and {weatherData.HighTemp}.");
 
 ## 三、委托
 
-定义形式
-
 ```c#
-delegate void Del(string str);
-delegate 类型 方法名(类型 形参)
+#region 委托,使用委托时可以直接用，也可以用invoke方法
+        /// <summary>
+        /// 显式委托的定义: delegate 返回类型 委托名称(参数1,参数2......)
+        /// 具体使用时，需要传入一个函数(或者委托)作为参数
+        /// 匿名委托不用定义委托的名称
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+
+        //委托定义
+        delegate string delegate1(int a, int b);
+        //具体调用函数
+        private string d1Func(int a, int b)
+        {
+            return (a + b).ToString();
+        }
+        //Func委托
+        Func<int, int, string> f1 = new Func<int, int, string>((int a, int b) =>
+        {
+            return (a + b).ToString();
+        });
+
+        /// <summary>
+        /// 匿名委托，没有传入具体的函数或者委托
+        /// </summary>
+        delegate1 d1NoName = delegate (int a, int b) { return (a + b).ToString(); };
+        /// <summary>
+        /// lambda表达式创建委托变量
+        /// </summary>
+        delegate1 d1Lambda = (a, b) => { return (a + b).ToString(); };
+
+        /// <summary>
+        /// 无参数，无返回值的委托
+        /// </summary>
+        delegate void delegate2();
+        private void d2Func()
+        {
+            Console.WriteLine("12345");
+        }
+
+        Action a1 = () =>
+        {
+            Console.WriteLine("12345");
+        };
+
+        #region Action委托 Action委托没有返回类型
+        //几种定义方式
+        /// <summary>
+        /// 显式定义
+        /// </summary>
+        Action action1 = new Action(() =>
+        {
+            Console.WriteLine(3);
+        });
+
+        //lambda表达式定义（只有一行时，括号可以省略）
+        Action action2 = () =>
+        {
+            Console.WriteLine(3);
+        };
+        Action action3 = () => Console.WriteLine(3);
+
+        /// <summary>
+        /// 有参数的定义
+        /// </summary>
+        Action<int, int> action4 = new Action<int, int>((a, b) =>
+        {
+            Console.WriteLine(a+b);
+        });
+
+        Action<int, int> action5 = (a, b) => Console.WriteLine(a + b);
+        #endregion
+
+        #region Func委托 Func委托有返回类型
+        #endregion
+
+ #endregion
 ```
 
-使用时，传入的参数是一个方法名，这个方法的返回类型和参数类型要和该委托的类型一致
 
-```c#
-//委托方法
-static void Notify(string name)
-{
-Console.WriteLine($"Notification received for: {name}");
-}
-
-//定义一个委托实例
-Del del1 = new Del(Notify);
-//Del del1 = Notify;//这种方法也可以
-del1("111111");//使用委托
-```
-
-### 1、委托的几种声明形式
-
-#### （1）显示声明一个委托，上例
-
-#### （2）使用匿名方法
-
-```c#
-Del del2 = delegate(string name) { Console.WriteLine($"Notification received for: {name}"); };
-```
-
-#### （3）使用lambda表达式
-
-~~~c#
-Del del3 = name => { Console.WriteLine($"Notification received for: {name}"); };
-~~~
 
 ### 2、协变，逆变
 
@@ -80,59 +125,6 @@ Del del3 = name => { Console.WriteLine($"Notification received for: {name}"); };
 协变对应修饰符是out，逆变对应修饰符是in
 
 用in和ref修饰参数时，使用前必须要赋值，使用out修饰，可以不用赋值
-
-### 3、Action委托
-
-#### （1）Action
-
-```c#
-public delegate void Action();//没有参数，没有返回值
-```
-
-#### （2）Action< in T>(T1 arg)
-
-~~~C#
-public delegate void Action<in T>(T obj);//一个参数，一个返回值；这是逆变类型参数。 既可以使用指定的类型，也可以使用派生程度较低的任何类型
-~~~
-
-~~~c#
-List<string> names = new List<string>();
-names.Add("Bruce");
-names.Add("Alfred");
-names.Add("Tim");
-names.Add("Richard");
-
-names.ForEach(Print);
-//(2)
-names.ForEach(delegate(string name)
-{
-    Console.WriteLine(name);
-});
-
-void Print(string s)
-{
-    Console.WriteLine(s);
-}
-//ForEach的参数是一个Action<T>类型的委托，这边不用显示声明一个Action<T>类型的委托，(2)则是直接用匿名表达式
-~~~
-
-#### (3）Action<in T1,in T2>(T1 arg1, T2 arg2)......
-
-**Action委托都是没有返回值的**
-
-```c#
-Action action = new Action(()=>{
-    
-});
-```
-
-### 4、Func委托
-
-#### （1）Func< TResult> 
-
-~~~c#
-public delegate TResult Func<out TResult>();
-~~~
 
 
 
@@ -181,6 +173,16 @@ lambda表达式用来创建匿名函数，有两种形式：
 2.创建查询
 
 3.执行查询
+
+查询的执行不同于查询本身，换句话说，仅通过创建查询变量不会检索到任何数据
+
+**延迟执行：**
+
+查询变量本身只存储查询命令，查询的实际执行将推迟到在foreach语句中循环访问查询变量后进行，此概念称为延迟执行
+
+**强制执行：**
+
+执行聚合函数的查询必须访问这些元素，比如Count，Max，Average，First等，由于本身必须使用foreach以便返回结果，这类查询不需要使用显示foreach语句。
 
 ```c#
 public class Student

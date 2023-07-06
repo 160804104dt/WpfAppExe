@@ -32,7 +32,7 @@
             </Grid.RowDefinitions>
             <Line
                 Grid.Row="0"
-                Stroke="Red"
+                Stroke="AliceBlue"
                 StrokeThickness="20"
                 X1="60"
                 Y1="5"
@@ -48,7 +48,7 @@
                 Grid.Row="2"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Stroke="Black"
+                Stroke="AliceBlue"
                 StrokeThickness="20"
                 X1="10"
                 X2="10"
@@ -63,6 +63,97 @@
                     </Style>
                 </Line.Style>
             </Line>
+
+            <Grid
+                Grid.Row="3"
+                Width="100"
+                Height="40">
+                <Border IsEnabled="False">
+                    <Grid x:Name="gridLayout" Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="20" />
+                        </Grid.ColumnDefinitions>
+                        <ToggleButton
+                            x:Name="ToggleButton"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            HorizontalContentAlignment="Right"
+                            Background="Gray"
+                            BorderBrush="Gray"
+                            BorderThickness="1"
+                            Focusable="False"
+                            Foreground="Red"
+                            IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                            IsTabStop="False">
+                            <ToggleButton.Style>
+                                <Style TargetType="{x:Type ToggleButton}">
+                                    <Setter Property="Foreground" Value="#FF333333" />
+                                    <Setter Property="BorderThickness" Value="1" />
+                                    <Setter Property="Padding" Value="2" />
+                                    <Setter Property="Cursor" Value="Hand" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                <Grid>
+                                                    <Border x:Name="BackgroundGradient" Margin="0">
+                                                        <Border.Background>
+                                                            <SolidColorBrush Color="{TemplateBinding Background}" />
+                                                        </Border.Background>
+                                                        <Border
+                                                            Width="16"
+                                                            Height="{TemplateBinding Height}"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Stretch"
+                                                            Background="#d9dbdb"
+                                                            CornerRadius="0,4,4,0">
+                                                            <Path
+                                                                x:Name="BtnArrowForeground"
+                                                                Width="16"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"
+                                                                Data="M4,2 L8,6 12,2"
+                                                                Stroke="Black" />
+                                                        </Border>
+                                                    </Border>
+                                                    <ContentPresenter />
+                                                </Grid>
+                                                <!--<ControlTemplate.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=CheckBox, Path=IsChecked}" Value="false"/>
+                                                </ControlTemplate.Triggers>-->
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsEnabled" Value="false">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ToggleButton.Style>
+                        </ToggleButton>
+                        <Rectangle
+                            x:Name="DisabledVisualElement"
+                            Fill="#ABABAB"
+                            IsHitTestVisible="False"
+                            Opacity="1" />
+                        <TextBox Grid.Column="0" Text="2222" />
+
+                    </Grid>
+                    <Border.Style>
+                        <Style TargetType="{x:Type Border}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Background" Value="#ABABAB" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                </Border>
+            </Grid>
+
         </Grid>
     </Grid>
 </UserControl>

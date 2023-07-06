@@ -144,19 +144,20 @@ namespace WpfAppExe.ViewModels
                             var grp = LinqTestList.OrderBy(x => x.HokenshaNo).GroupBy(x => x.HokenshaKanjiName).ToList();//list类型
                             Dictionary<string, List<HokenshaNoMDto>> grp1 = LinqTestList.OrderBy(x => x.HokenshaNo).GroupBy(x => x.HokenshaKanjiName).ToDictionary(x => x.Key, x => x.ToList());//字典类型
                             //查找
-                            LinqTestList.Find(x => x.PostalNo.Contains("22"));//符合条件的第一个元素
-                            LinqTestList.FindLast(x => x.PostalNo.Contains("22"));//符合条件的最后一个元素
-                            LinqTestList.FindAll(x => x.PostalNo.Contains("444")).OrderByDescending(x => x.HokenshaNo);//符合条件的所有元素
-                            LinqTestList.FindIndex(x => x.PostalNo.Contains("22"));//符合条件的第一个下标
-                            LinqTestList.FindLastIndex(x => x.PostalNo.Contains("22"));//符合条件的最后一个下标
+                            HokenshaNoMDto? f1 = LinqTestList.Find(x => x.PostalNo.Contains("22"));//符合条件的第一个元素
+                            HokenshaNoMDto? f2 = LinqTestList.FindLast(x => x.PostalNo.Contains("22"));//符合条件的最后一个元素
+                            List<HokenshaNoMDto> f3 = LinqTestList.FindAll(x => x.PostalNo.Contains("444")).OrderByDescending(x => x.HokenshaNo).ToList();//符合条件的所有元素
+
+                            int f4 = LinqTestList.FindIndex(x => x.PostalNo.Contains("22"));//符合条件的第一个下标
+                            int f5 = LinqTestList.FindLastIndex(x => x.PostalNo.Contains("22"));//符合条件的最后一个下标
                             //投影
-                            List<HokenshaNoMDto> list3 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("300")).ToList();//查找
-                            List<HokenshaNoMDto> list4 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("300")).ToList();//where
-                            List<HokenshaNoMDto> list5 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("300")).ToList();//where
-                            List<HokenshaNoMDto> list6 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("300")).ToList();//where
-                            List<HokenshaNoMDto> list7 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("300")).ToList();//where
-                            List<HokenshaNoMDto> list8 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("300")).ToList();//where
-                            List<HokenshaNoMDto> list9 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("300")).ToList();//where
+                            List<HokenshaNoMDto> list3  = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//查找
+                            List<HokenshaNoMDto> list4  = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
+                            List<HokenshaNoMDto> list5  = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
+                            List<HokenshaNoMDto> list6  = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
+                            List<HokenshaNoMDto> list7  = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
+                            List<HokenshaNoMDto> list8  = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
+                            List<HokenshaNoMDto> list9  = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
                             List<HokenshaNoMDto> list10 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("300")).ToList();//where
                             break;
                         case "3":
@@ -169,6 +170,9 @@ namespace WpfAppExe.ViewModels
 
                             delegate2 d2 = new delegate2(d2Func);
                             d2.Invoke();
+
+                            Func<int, int> func4 = new Func<int, int>(usefunc4);
+                            func4.Invoke(8);
                             break;
                     }
                 }
@@ -628,6 +632,26 @@ namespace WpfAppExe.ViewModels
         #endregion
 
         #region Func委托 Func委托有返回类型
+        Func<int> func1 = new Func<int>(() =>
+        {
+            return 1;
+        });
+
+        Func<int,string> func2 = new Func<int,string>(a =>
+        {
+            return "r";
+        });
+
+        Func<int, int, string> func3 = (a, b) =>
+        {
+            return (a + b).ToString();
+        };
+
+        private int usefunc4(int a)
+        {
+            return a;
+        }
+
         #endregion
 
         #endregion
