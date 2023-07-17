@@ -1,6 +1,6 @@
-# C#
+### C#
 
-## 一、数组
+#### 一、数组
 
 数组的声明：
 
@@ -19,7 +19,7 @@ a[1] = new int[5];//第二行5列
 a[2] = new int[20];//第三行2列
 ```
 
-## 二、字符串内插
+#### 二、字符串内插
 
 可以自己定义字符串的表达格式：
 
@@ -33,7 +33,7 @@ Console.WriteLine($"    was {weatherData.LowTemp} and {weatherData.HighTemp}.");
 
  内插字符串通过 `$` 标记来声明。 字符串插内插计算 `{` 和 `}` 之间的表达式，然后将结果转换为 `string`，并将括号内的文本替换为表达式的字符串结果。 第一个表达式 (`{weatherData.Date:MM-DD-YYYY}`) 中的 `:` 指定格式字符串。 在前一个示例中，这指定日期应以“MM-DD-YYYY”格式显示。 
 
-## 三、委托
+#### 三、委托
 
 ```c#
 #region 委托,使用委托时可以直接用，也可以用invoke方法
@@ -118,7 +118,7 @@ Console.WriteLine($"    was {weatherData.LowTemp} and {weatherData.HighTemp}.");
 
 
 
-### 2、协变，逆变
+##### 2、协变，逆变
 
 子类向父类转变是协变，父类向子类转化是逆变
 
@@ -128,9 +128,9 @@ Console.WriteLine($"    was {weatherData.LowTemp} and {weatherData.HighTemp}.");
 
 
 
-## 四、lambda表达式
+#### 四、lambda表达式
 
-### 形式
+##### 形式
 
 lambda表达式用来创建匿名函数，有两种形式：
 
@@ -146,7 +146,7 @@ lambda表达式用来创建匿名函数，有两种形式：
 (input-parameters) => { <sequence-of-statements> }
 ```
 
-### lambda表达式的输入参数
+##### lambda表达式的输入参数
 
 1.使用空括号指定没有参数
 
@@ -162,7 +162,7 @@ lambda表达式用来创建匿名函数，有两种形式：
 
 
 
-## 五、LINQ（语言集成查询）
+#### 五、LINQ（语言集成查询）
 
 类似于数据库查询语句
 
@@ -306,7 +306,7 @@ var list9 = data.OrderBy(x => x.Age).ToList();//根据年龄排序
 
 
 
-## 六、Async 和 Await 的异步编程
+#### 六、Async 和 Await 的异步编程
 
 ```c#
 	#region 普通线程池
@@ -484,9 +484,9 @@ var list9 = data.OrderBy(x => x.Age).ToList();//根据年龄排序
 
 
 
-## 七、虚函数
+#### 七、虚函数
 
-## 八、new关键字
+#### 八、new关键字
 
 new关键字的三种用法：
 
@@ -496,9 +496,9 @@ new关键字的三种用法：
 
 3、
 
-## 九、正则表达式
+#### 九、正则表达式
 
-### 1、语法
+##### 1、语法
 
 **+**：前面的字符至少出现一次
 
@@ -526,9 +526,9 @@ eg：rb?c 可以匹配rc，rbc
 
 
 
-## 十、面向对象六大原则
+#### 十、面向对象六大原则
 
-### 1.单一职责原则
+##### 1.单一职责原则
 
 一个类只负责一个功能领域中的相应职责，或者可以定义为：就一个类而言，应该只有一个引起它变化的原因
 
@@ -536,7 +536,7 @@ eg：rb?c 可以匹配rc，rbc
 
 
 
-### 2.开闭原则
+##### 2.开闭原则
 
 一个软件实体应该对扩展开放，对修改关闭；一个软件实体尽量在不修改源代码的情况下进行对外扩展；
 
@@ -544,7 +544,7 @@ eg：rb?c 可以匹配rc，rbc
 
 开闭原则是面向对象设计的目标
 
-### 3.里氏替换原则
+##### 3.里氏替换原则
 
 所有引用基类的地方必须能够透明的使用其子类的对象；
 
@@ -558,7 +558,7 @@ eg：rb?c 可以匹配rc，rbc
 
 （2）尽量把父类设计成抽象类或者接口
 
-### 4.依赖倒置原则
+##### 4.依赖倒置原则
 
 抽象不应该依赖于细节，细节应该依赖于抽象，换言之，要面向接口编程，而不是针对实现编程
 
@@ -576,13 +576,13 @@ eg：rb?c 可以匹配rc，rbc
 
 （3）接口注入，在接口方法中声明依赖对象
 
-### 5.接口隔离原则
+##### 5.接口隔离原则
 
 使用多个专门的接口，而不应该使用单一的总接口，即客户端不应该依赖那些不需要的接口;
 
 在使用接口隔离原则时，我们需要注意控制接口的粒度，接口不能太小，如果太小会导致接口泛滥，不利于维护，接口也不能太大，太大会违背接口隔离原则，使用起来不方便。
 
-### 6.迪米特法则
+##### 6.迪米特法则
 
 一个软件实体应当尽可能的少与其他实体发生相互作用
 
@@ -590,7 +590,7 @@ eg：rb?c 可以匹配rc，rbc
 
 
 
-## 十一、设计模式（Design Pattern）
+#### 十一、设计模式（Design Pattern）
 
 设计模式是一套被反复使用的，多数人知晓的，经过分类编目的，代码设计经验的总结。
 
@@ -604,7 +604,13 @@ eg：rb?c 可以匹配rc，rbc
 
 
 
-## 十二、多线程
+#### 十二、多线程
+
+进程和线程：
+
+进程包含着一个运行程序所需要的资源，一个正在运行的应用程序可以看做一个进程，一个进程可以包含一个或者多个线程
+
+线程是操作系统分配给CPU时间的基本单位
 
 c#中的线程类是Thread，有4个重载的构造函数
 
@@ -630,7 +636,31 @@ public Thread(ThreadStart start, int maxStackSize);
 
 通过BeginXXX方法运行的线程都是后台线程
 
-## 十三、泛型
+```c#
+Thread thread1 = new Thread(ThreadMethod1);
+Thread thread2 = new Thread(ThreadMethod2);
+Thread thread3 = new Thread(ThreadMethod1,2);
+Thread thread4 = new Thread(ThreadMethod2,3);
+thread1.Start();
+thread2.Start();
+thread2.Start(2);
+thread3.Start();
+thread4.Start();
+
+private void ThreadMethod1()
+{
+    System.Diagnostics.Debug.WriteLine("this is new thread without paramater");
+}
+
+private void ThreadMethod2(object? a)
+{
+    System.Diagnostics.Debug.WriteLine("this is new thread with paramater");
+}
+```
+
+
+
+#### 十三、泛型
 
 泛型是为了解决代码重用的问题而提出的
 
@@ -640,7 +670,7 @@ public Thread(ThreadStart start, int maxStackSize);
 
 在处理引用类型时，避免了强制类型转换
 
-## 十四、排序算法
+#### 十四、排序算法
 
 1、冒泡排序
 
@@ -649,3 +679,26 @@ public Thread(ThreadStart start, int maxStackSize);
 3、快速排序
 
 4、
+
+#### 十五、文件读写
+
+```c#
+using System.IO;
+//读取文件
+StreamReader sr = new StreamReader(info.FullName,Encoding.UTF8);
+string line = sr.ReadLine();//一行一行读
+string allLine = sr.ReadToEnd();//一次性读完
+while(line != null)
+{
+	//具体处理
+	line = sr.ReadLine();
+}
+sr.Close();
+
+//写入文件
+FileStream fs = new FileStream(filePath,FileMode.Open...)
+StreamWriter sw = new StreamWriter();
+sw.WriteLine(content);
+sw.Close();
+```
+

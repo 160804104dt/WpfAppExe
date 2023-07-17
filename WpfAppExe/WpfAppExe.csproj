@@ -15,7 +15,6 @@
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.FuzzyStringMatch" Version="5.0.10" />
-    <PackageReference Include="System.Reactive" Version="5.0.0" />
     <PackageReference Include="Unity.Interception" Version="5.11.1" />
   </ItemGroup>
 
@@ -37,10 +36,9 @@
     <Reference Include="ReactiveProperty.Core">
       <HintPath>..\..\packages\reactiveproperty.core\9.0.0\lib\net6.0\ReactiveProperty.Core.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Validation\" />
+    <Reference Include="System.Reactive">
+      <HintPath>..\..\packages\System.Reactive.5.0.0\lib\net5.0\System.Reactive.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

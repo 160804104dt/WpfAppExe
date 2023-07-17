@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using WpfAppExe.Core;
 using WpfAppExe.ViewModels.UserControls;
 using WpfAppExe.Views.UserControls;
@@ -16,7 +17,11 @@ namespace WpfAppExe.ViewModels
         public ListBoxUserControl listBoxUserControl { get; set; } = new ListBoxUserControl();
         public ReactiveProperty<ListBoxUserControlViewModel> ListBoxUserControl { get; set; } = new ReactiveProperty<ListBoxUserControlViewModel>(new ListBoxUserControlViewModel());
         public ReactiveProperty<DataGridUserControlViewModel> DataGridUserControl { get; set; } = new ReactiveProperty<DataGridUserControlViewModel>(new DataGridUserControlViewModel());
-
+        public ReactivePropertySlim<string> ButtonContext { get; set; } = new ReactivePropertySlim<string>("dddddddd");
+        /// <summary>
+        /// 
+        /// </summary>
+        public ReactiveCommand AncestorCommand { get; set; } = new ReactiveCommand();
 
         protected override void InitData()
         {
@@ -32,6 +37,12 @@ namespace WpfAppExe.ViewModels
             {
                 Console.WriteLine(SelectedTabIndex.Value);
             });
+
+            AncestorCommand.Subscribe(o =>
+            {
+                MessageBox.Show("这是FindAncestor，向上找的内容");
+            });
+
         }
     }
 }

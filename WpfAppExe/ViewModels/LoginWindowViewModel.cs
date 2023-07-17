@@ -72,7 +72,11 @@ namespace WpfAppExe.ViewModels
 
             PreviewKeyDownCommand.Subscribe(o =>
             {
-           
+                //System.Diagnostics.Debug.WriteLine(o);
+                if(o is MouseButtonEventArgs)
+                {
+
+                }
             });
 
             LoginCommand.Subscribe(o =>

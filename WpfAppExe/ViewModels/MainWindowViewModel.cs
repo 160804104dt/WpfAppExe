@@ -10,8 +10,11 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using WpfAppExe.Core;
 using WpfAppExe.Views;
 
@@ -22,10 +25,13 @@ namespace WpfAppExe.ViewModels
         public ReactiveCommand ClickCommand { get; set; } = new ReactiveCommand();
         public ReactiveCommand Row4Command { get; set; } = new ReactiveCommand();
         public ReactiveCommand SortCommand { get; set; } = new ReactiveCommand();
+        public ReactiveCommand PreviewKeyDownCommand { get; set; } = new ReactiveCommand();
 
         int[] array = new int[11] { 5, 3, 7, 6, 4, 1, 0, 2, 9, 10, 8 };
 
         public List<HokenshaNoMDto> LinqTestList = new List<HokenshaNoMDto>();
+
+        public ReactiveProperty<NpClass> Title = new ReactiveProperty<NpClass>(new NpClass());
 
         /// <summary>
         /// 冒泡排序
@@ -72,6 +78,16 @@ namespace WpfAppExe.ViewModels
         {
             base.InitData();
             Init();
+            Title.Value.Name = "张三";
+            Thread thread1 = new Thread(ThreadMethod1);
+            Thread thread2 = new Thread(ThreadMethod2);
+            Thread thread3 = new Thread(ThreadMethod1,2);
+            Thread thread4 = new Thread(ThreadMethod2,3);
+            thread1.Start();
+            //thread2.Start();
+            thread2.Start(2);
+            thread3.Start();
+            thread4.Start();
         }
 
         protected override void RegisterCommands()
@@ -92,88 +108,102 @@ namespace WpfAppExe.ViewModels
             {
                 if (o is string selectedIndex)
                 {
-                    switch (selectedIndex)
+                    if (selectedIndex == "1")
                     {
-                        case "1":
-                            int value = 1234;
-                            long commonSecond = 0;
-                            long objectSecond = 0;
-                            long genericSecond = 0;
+                        int value = 1234;
+                        long commonSecond = 0;
+                        long objectSecond = 0;
+                        long genericSecond = 0;
 
-                            Stopwatch stopwatch1 = new Stopwatch();
-                            Stopwatch stopwatch2 = new Stopwatch();
-                            Stopwatch stopwatch3 = new Stopwatch();
-                            stopwatch1.Start();
-                            for (int i = 0; i < 100000000; i++)
-                            {
-                                Test(value);
-                            }
-                            stopwatch1.Stop();
-                            commonSecond = stopwatch1.ElapsedMilliseconds;
+                        Stopwatch stopwatch1 = new Stopwatch();
+                        Stopwatch stopwatch2 = new Stopwatch();
+                        Stopwatch stopwatch3 = new Stopwatch();
+                        stopwatch1.Start();
+                        for (int i = 0; i < 100000000; i++)
+                        {
+                            Test(value);
+                        }
+                        stopwatch1.Stop();
+                        commonSecond = stopwatch1.ElapsedMilliseconds;
 
-                            stopwatch2.Start();
-                            for (int i = 0; i < 100000000; i++)
-                            {
-                                TestObject(value);
-                            }
-                            stopwatch2.Stop();
-                            objectSecond = stopwatch2.ElapsedMilliseconds;
+                        stopwatch2.Start();
+                        for (int i = 0; i < 100000000; i++)
+                        {
+                            TestObject(value);
+                        }
+                        stopwatch2.Stop();
+                        objectSecond = stopwatch2.ElapsedMilliseconds;
 
-                            stopwatch3.Start();
-                            for (int i = 0; i < 100000000; i++)
-                            {
-                                Test<int>(value);
-                            }
-                            stopwatch3.Stop();
-                            genericSecond = stopwatch3.ElapsedMilliseconds;
+                        stopwatch3.Start();
+                        for (int i = 0; i < 100000000; i++)
+                        {
+                            Test<int>(value);
+                        }
+                        stopwatch3.Stop();
+                        genericSecond = stopwatch3.ElapsedMilliseconds;
 
-                            MessageBox.Show(commonSecond.ToString() + "\n" + objectSecond.ToString() + "\n" + genericSecond.ToString());
+                        MessageBox.Show(commonSecond.ToString() + "\n" + objectSecond.ToString() + "\n" + genericSecond.ToString());
 
-                            Test1<Stopwatch>(new Stopwatch());
+                        Test1<Stopwatch>(new Stopwatch());
 
-                            Class1 class1 = new Class1(3);
+                        Class1 class1 = new Class1(3);
 
-                            Test2<Class1>(class1);
-                            break;
-                        case "2":
-                            //升序
-                            List<HokenshaNoMDto> list1 = LinqTestList.OrderBy(x => x.HokenshaNo).ToList();
-                            //降序
-                            List<HokenshaNoMDto> list2 = LinqTestList.OrderByDescending(x => x.HokenshaNo).ToList();
-                            //分组
-                            var grp = LinqTestList.OrderBy(x => x.HokenshaNo).GroupBy(x => x.HokenshaKanjiName).ToList();//list类型
-                            Dictionary<string, List<HokenshaNoMDto>> grp1 = LinqTestList.OrderBy(x => x.HokenshaNo).GroupBy(x => x.HokenshaKanjiName).ToDictionary(x => x.Key, x => x.ToList());//字典类型
-                            //查找
-                            HokenshaNoMDto? f1 = LinqTestList.Find(x => x.PostalNo.Contains("22"));//符合条件的第一个元素
-                            HokenshaNoMDto? f2 = LinqTestList.FindLast(x => x.PostalNo.Contains("22"));//符合条件的最后一个元素
-                            List<HokenshaNoMDto> f3 = LinqTestList.FindAll(x => x.PostalNo.Contains("444")).OrderByDescending(x => x.HokenshaNo).ToList();//符合条件的所有元素
+                        Test2<Class1>(class1);
+                    }
+                    else if (selectedIndex == "2")
+                    {
+                        //升序
+                        List<HokenshaNoMDto> list1 = LinqTestList.OrderBy(x => x.HokenshaNo).ToList();
+                        //降序
+                        List<HokenshaNoMDto> list2 = LinqTestList.OrderByDescending(x => x.HokenshaNo).ToList();
+                        //分组
+                        var grp = LinqTestList.OrderBy(x => x.HokenshaNo).GroupBy(x => x.HokenshaKanjiName).ToList();//list类型
+                        Dictionary<string, List<HokenshaNoMDto>> grp1 = LinqTestList.OrderBy(x => x.HokenshaNo).GroupBy(x => x.HokenshaKanjiName).ToDictionary(x => x.Key, x => x.ToList());//字典类型
+                                                                                                                                                                                            //查找
+                        HokenshaNoMDto? f1 = LinqTestList.Find(x => x.PostalNo.Contains("22"));//符合条件的第一个元素
+                        HokenshaNoMDto? f2 = LinqTestList.FindLast(x => x.PostalNo.Contains("22"));//符合条件的最后一个元素
+                        List<HokenshaNoMDto> f3 = LinqTestList.FindAll(x => x.PostalNo.Contains("444")).OrderByDescending(x => x.HokenshaNo).ToList();//符合条件的所有元素
 
-                            int f4 = LinqTestList.FindIndex(x => x.PostalNo.Contains("22"));//符合条件的第一个下标
-                            int f5 = LinqTestList.FindLastIndex(x => x.PostalNo.Contains("22"));//符合条件的最后一个下标
-                            //投影
-                            List<HokenshaNoMDto> list3  = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//查找
-                            List<HokenshaNoMDto> list4  = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
-                            List<HokenshaNoMDto> list5  = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
-                            List<HokenshaNoMDto> list6  = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
-                            List<HokenshaNoMDto> list7  = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
-                            List<HokenshaNoMDto> list8  = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
-                            List<HokenshaNoMDto> list9  = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
-                            List<HokenshaNoMDto> list10 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("300")).ToList();//where
-                            break;
-                        case "3":
-                            delegate1 d1 = new delegate1(d1Func);
-                            d1.Invoke(3, 2); //显式委托
+                        int f4 = LinqTestList.FindIndex(x => x.PostalNo.Contains("22"));//符合条件的第一个下标
+                        int f5 = LinqTestList.FindLastIndex(x => x.PostalNo.Contains("22"));//符合条件的最后一个下标
+                                                                                            //投影
+                        List<HokenshaNoMDto> list3 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//查找
+                        List<HokenshaNoMDto> list4 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
+                        List<HokenshaNoMDto> list5 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
+                        List<HokenshaNoMDto> list6 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
+                        List<HokenshaNoMDto> list7 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
+                        List<HokenshaNoMDto> list8 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
+                        List<HokenshaNoMDto> list9 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
+                        List<HokenshaNoMDto> list10 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("300")).ToList();//where
+                    }
+                    else if (selectedIndex == "3")
+                    {
+                        delegate1 d1 = new delegate1(d1Func);
+                        d1.Invoke(3, 2); //显式委托
 
-                            d1NoName.Invoke(5, 5);//匿名委托
+                        d1NoName.Invoke(5, 5);//匿名委托
 
-                            d1Lambda.Invoke(3, 3);//lambda表达式
+                        d1Lambda.Invoke(3, 3);//lambda表达式
 
-                            delegate2 d2 = new delegate2(d2Func);
-                            d2.Invoke();
+                        delegate2 d2 = new delegate2(d2Func);
+                        d2.Invoke();
 
-                            Func<int, int> func4 = new Func<int, int>(usefunc4);
-                            func4.Invoke(8);
-                            break;
+                        Func<int, int> func4 = new Func<int, int>(usefunc4);
+                        func4.Invoke(8);
+                    }
+                    else if(selectedIndex == "4")
+                    {
+                        //这个方法不再支持，会抛出异常
+                        //Func<string, int, string> func = Dosomething;
+                        //var asyncResult = func.BeginInvoke("JOY",0,null,null);
+                        //string result = func.EndInvoke(asyncResult);
+                        long time1 = DateTime.Now.Ticks;
+                        long time2 = DateTime.Now.Ticks;
+                        Thread thread5 = new Thread(Thread1);
+                        Thread thread6 = new Thread(Thread2);
+                        thread5.Start();
+                        thread6.Start();
+
                     }
                 }
             });
@@ -270,6 +300,22 @@ namespace WpfAppExe.ViewModels
                             }
                             BucketSort(BucketSortArrays);
                             break;
+                    }
+                }
+            });
+
+            PreviewKeyDownCommand.Subscribe(o =>
+            {
+                if(o is KeyEventArgs e)
+                {
+                    if (e.Key == Key.Right)
+                    {
+                        TraversalRequest request = new TraversalRequest(FocusNavigationDirection.Next);
+                        request.Wrapped = true;
+                        if(e.OriginalSource is Button button)
+                        {
+                            button.MoveFocus(request);
+                        }
                     }
                 }
             });
@@ -655,6 +701,63 @@ namespace WpfAppExe.ViewModels
         #endregion
 
         #endregion
+
+        #region 多线程
+        private void ThreadMethod1()
+        {
+            System.Diagnostics.Debug.WriteLine("this is new thread without paramater");
+        }
+        private void ThreadMethod2(object? a)
+        {
+            System.Diagnostics.Debug.WriteLine("this is new thread with paramater");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="millisecondTimeout"></param>
+        /// <returns></returns>
+        private string Dosomething(string name,int millisecondTimeout)
+        {
+            System.Diagnostics.Debug.WriteLine($"{Thread.CurrentThread.ManagedThreadId:00}执行");
+            return name;
+        }
+
+        #region thread demo
+        private void dosth()
+        {
+            for(int j = 0; j < 1000; j++)
+            {
+                int a = 15;
+                a = a * a ;
+            }
+        }
+
+        private void Thread1()
+        {
+            for(int i = 0; i < 1000; i++)
+            {
+                dosth();
+                System.Diagnostics.Debug.WriteLine("1");
+            }
+        }
+
+        private void Thread2()
+        {
+            for (int i = 0; i < 1000; i++)
+            {
+                dosth();
+                System.Diagnostics.Debug.WriteLine("2");
+            }
+        }
+        #endregion
+
+        /// <summary>
+        /// 回调函数
+        /// </summary>
+        private void Callback() { System.Diagnostics.Debug.WriteLine("执行回调"); }
+        #endregion
     }
 
     public class Class1
@@ -668,11 +771,11 @@ namespace WpfAppExe.ViewModels
     {
         public string Name
         {
-            get => (string)GetValue(NameProperty); 
+            get => (string)GetValue(NameProperty);
             set => SetValue(NameProperty, value);
         }
 
-        public static readonly DependencyProperty NameProperty = DependencyProperty.Register("Name", typeof(string), typeof(DpClass),new PropertyMetadata(""));
+        public static readonly DependencyProperty NameProperty = DependencyProperty.Register("NameProperty",typeof(string),typeof(DpClass),new PropertyMetadata("张三"));
     }
 
     public class NpClass : INotifyPropertyChanged
