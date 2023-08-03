@@ -27,11 +27,21 @@
             <TabItem Header="Line直线">
                 <uc:LineUserControl />
             </TabItem>
-            <TabItem Header="Rectangle矩形" />
-            <TabItem Header="Ellipse椭圆" />
-            <TabItem Header="Polygon多边形" />
-            <TabItem Header="Polylin折线" />
-            <TabItem Header="Path路径" />
+            <TabItem Header="Rectangle矩形">
+                <uc:RectangleUserControl />
+            </TabItem>
+            <TabItem Header="Ellipse椭圆">
+                <uc:RectangleUserControl />
+            </TabItem>
+            <TabItem Header="Polygon多边形">
+                <uc:RectangleUserControl />
+            </TabItem>
+            <TabItem Header="Polyline折线">
+                <uc:RectangleUserControl />
+            </TabItem>
+            <TabItem Header="Path路径">
+                <uc:PathUserControl />
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

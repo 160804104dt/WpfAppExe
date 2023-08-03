@@ -9,7 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mvvm="http://prismlibrary.com/"
     xmlns:sl="clr-namespace:WpfAppExe.Selector"
-    Title="{Binding Title.Value.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+    Title="{Binding bindableClass.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
     Width="1200"
     Height="450"
     mvvm:ViewModelLocator.AutoWireViewModel="True"
@@ -103,6 +103,10 @@
                 Command="{Binding Row4Command, Mode=OneWay}"
                 CommandParameter="4"
                 Content="Thread" />
+            <Button
+                Command="{Binding Row4Command, Mode=OneWay}"
+                CommandParameter="5"
+                Content="Task" />
         </StackPanel>
         <StackPanel Grid.Row="4" Orientation="Horizontal">
             <Button

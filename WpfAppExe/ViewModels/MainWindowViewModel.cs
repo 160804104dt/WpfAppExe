@@ -30,8 +30,10 @@ namespace WpfAppExe.ViewModels
         int[] array = new int[11] { 5, 3, 7, 6, 4, 1, 0, 2, 9, 10, 8 };
 
         public List<HokenshaNoMDto> LinqTestList = new List<HokenshaNoMDto>();
+        public List<HokenshaMatomeConfig> LinqTestList1 = new List<HokenshaMatomeConfig>();
+        public NpClass Title { get; set; } = new NpClass() { Name = "李四"};
 
-        public ReactiveProperty<NpClass> Title = new ReactiveProperty<NpClass>(new NpClass());
+        public BindableClass bindableClass { get; set; } = new BindableClass();
 
         /// <summary>
         /// 冒泡排序
@@ -78,7 +80,8 @@ namespace WpfAppExe.ViewModels
         {
             base.InitData();
             Init();
-            Title.Value.Name = "张三";
+            Title.Name = "张三";
+            bindableClass.Name = "3333";
             Thread thread1 = new Thread(ThreadMethod1);
             Thread thread2 = new Thread(ThreadMethod2);
             Thread thread3 = new Thread(ThreadMethod1,2);
@@ -166,15 +169,28 @@ namespace WpfAppExe.ViewModels
 
                         int f4 = LinqTestList.FindIndex(x => x.PostalNo.Contains("22"));//符合条件的第一个下标
                         int f5 = LinqTestList.FindLastIndex(x => x.PostalNo.Contains("22"));//符合条件的最后一个下标
-                                                                                            //投影
-                        List<HokenshaNoMDto> list3 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//查找
-                        List<HokenshaNoMDto> list4 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
-                        List<HokenshaNoMDto> list5 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
-                        List<HokenshaNoMDto> list6 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
-                        List<HokenshaNoMDto> list7 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
-                        List<HokenshaNoMDto> list8 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
-                        List<HokenshaNoMDto> list9 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("211")).ToList();//where
-                        List<HokenshaNoMDto> list10 = LinqTestList.Where(x => x.HoubetsuKbn.Equals("300")).ToList();//where
+                        var list3 = LinqTestList.Select(x => x.HokenshaNo).ToList();    //投影
+                        var list4 = LinqTestList.SelectMany(x => x.HokenshaNo).ToList();//先找到HokenshaNo，再把HokenshaNo拆分下来
+                        var list5 = LinqTestList.Join(LinqTestList1, t1 => t1.prefectureCode, t2 => t2.prefecture_code, (t1, t2) =>
+                        {
+                            if (t1.prefectureCode == t2.prefecture_code)
+                            {
+                                return new { t1, t2.hokensha_matome_kbn };
+                            }
+                            return null;
+                        }).ToList();//join连接查询
+
+                        var list6 = LinqTestList.Select(x => x.address1).Aggregate(new List<string>(), (a, p) =>
+                        {
+                            a.Add(p);
+                            return a;
+                        });
+
+                        var list7 = LinqTestList.Select(x => x.HokenshaKanjiShortName).Aggregate(new List<string>(), (l, m) =>
+                        {
+                            l.Add(m);
+                            return l;
+                        });
                     }
                     else if (selectedIndex == "3")
                     {
@@ -191,7 +207,7 @@ namespace WpfAppExe.ViewModels
                         Func<int, int> func4 = new Func<int, int>(usefunc4);
                         func4.Invoke(8);
                     }
-                    else if(selectedIndex == "4")
+                    else if (selectedIndex == "4")
                     {
                         //这个方法不再支持，会抛出异常
                         //Func<string, int, string> func = Dosomething;
@@ -204,6 +220,21 @@ namespace WpfAppExe.ViewModels
                         thread5.Start();
                         thread6.Start();
 
+
+
+                    }
+                    else if (selectedIndex == "5")
+                    {
+                        Task task = new Task(new Action(() =>
+                        {
+                            System.Diagnostics.Debug.WriteLine("");
+                        }));
+                        task.Start();
+
+                        Task<HokenshaNoMDto> task1 = new Task<HokenshaNoMDto>(new Func<HokenshaNoMDto>(() =>
+                        {
+                            return new HokenshaNoMDto();
+                        }));
                     }
                 }
             });
@@ -589,6 +620,19 @@ namespace WpfAppExe.ViewModels
                 mt.ForEach(o =>
                 {
                     LinqTestList.Add(o);
+                });
+
+                string commandStr1 = "select * from common.hokensha_matome_config";
+                NpgsqlDataAdapter adapter1 = new NpgsqlDataAdapter(commandStr1, connection);
+                DataTable dataTable1 = new DataTable();
+                adapter1.Fill(dataTable1);
+                if(dataTable1 == null || dataTable1.Rows.Count == 0)
+                    return;
+                var res1 = JsonConvert.SerializeObject(dataTable1);
+                var mt1 = JsonConvert.DeserializeObject<List<HokenshaMatomeConfig>>(res1);
+                mt1.ForEach(o =>
+                {
+                    LinqTestList1.Add(o);
                 });
             }
             finally

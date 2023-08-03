@@ -17,6 +17,7 @@ namespace WpfAppExe.ViewModels
         public ListBoxUserControl listBoxUserControl { get; set; } = new ListBoxUserControl();
         public ReactiveProperty<ListBoxUserControlViewModel> ListBoxUserControl { get; set; } = new ReactiveProperty<ListBoxUserControlViewModel>(new ListBoxUserControlViewModel());
         public ReactiveProperty<DataGridUserControlViewModel> DataGridUserControl { get; set; } = new ReactiveProperty<DataGridUserControlViewModel>(new DataGridUserControlViewModel());
+        
         public ReactivePropertySlim<string> ButtonContext { get; set; } = new ReactivePropertySlim<string>("dddddddd");
         /// <summary>
         /// 

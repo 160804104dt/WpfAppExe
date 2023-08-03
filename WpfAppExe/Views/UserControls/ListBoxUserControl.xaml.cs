@@ -23,6 +23,18 @@ namespace WpfAppExe.Views.UserControls
         public ListBoxUserControl()
         {
             InitializeComponent();
+            MyListBox.AddHandler(MouseRightButtonUpEvent,new RoutedEventHandler(MouseRightButtonUp),true);
+
+        }
+
+        private void MouseRightButtonUp(object e, RoutedEventArgs arg)
+        {
+            MessageBox.Show("方法1");
+        }
+
+        private void MyListBox_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("方法2");
         }
     }
 }

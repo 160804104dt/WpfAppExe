@@ -124,6 +124,7 @@
             VerticalAlignment="Top"
             ItemsSource="{Binding DataList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             KeyboardNavigation.TabNavigation="Cycle"
+            PreviewMouseRightButtonUp="MyListBox_PreviewMouseRightButtonUp"
             ScrollViewer.CanContentScroll="True"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
             VirtualizingPanel.IsVirtualizing="True">

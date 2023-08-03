@@ -10,25 +10,25 @@ namespace DataBase.DbDto
 {
     public class HokenshaNoMDto:BindableBase
     {
-        private string hokenshaNo;
-        private string houbetsuKbn;
-        private DateTime startSate;
-        private DateTime endDate;
-        private string hokenshaKanjiName;
-        private string hokenshaKanjiShortName;
-        private string hokenshaKanaName;
-        private string prefectureCode;
-        private decimal kumiaiinKyuufuWariai;
-        private decimal familyKyuufuWariai;
-        private string postalNo;
-        private string address1;
-        private string address2;
-        private string phoneNo;
-        private string idouKbn;
-        private int createdBy;
-        private DateTime createdAt;
-        private int updatedBy;
-        private DateTime updatedAt;
+        public string hokenshaNo;
+        public string houbetsuKbn;
+        public DateTime startSate;
+        public DateTime endDate;
+        public string hokenshaKanjiName;
+        public string hokenshaKanjiShortName;
+        public string hokenshaKanaName;
+        public string prefectureCode;
+        public decimal kumiaiinKyuufuWariai;
+        public decimal familyKyuufuWariai;
+        public string postalNo;
+        public string address1;
+        public string address2;
+        public string phoneNo;
+        public string idouKbn;
+        public int createdBy;
+        public DateTime createdAt;
+        public int updatedBy;
+        public DateTime updatedAt;
 
         [JsonProperty("hokensha_no")]
         public string HokenshaNo { get => hokenshaNo; set => SetProperty(ref hokenshaNo, value); }

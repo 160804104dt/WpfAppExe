@@ -300,6 +300,11 @@ var list6 = data.GroupBy(x => x.Age).ToDictionary(x => x.Key, x => x.ToList());
 var item = data.Find(x => x.Age > 46);//找到第一个符合条件的
 var list8 = data.Union(data).ToList();//取交集
 var list9 = data.OrderBy(x => x.Age).ToList();//根据年龄排序
+var list6 = LinqTestList.Select(x => x.address1).Aggregate(new List<string>(), (a, p) =>
+{
+	a.Add(p);
+	return a;
+});//聚集，可以选择其中的属性聚齐起来
 ```
 
 
@@ -685,7 +690,7 @@ private void ThreadMethod2(object? a)
 ```c#
 using System.IO;
 //读取文件
-StreamReader sr = new StreamReader(info.FullName,Encoding.UTF8);
+StreamReader sr = new StreamReader(filePath,Encoding.UTF8);
 string line = sr.ReadLine();//一行一行读
 string allLine = sr.ReadToEnd();//一次性读完
 while(line != null)

@@ -16,7 +16,7 @@
         <StackPanel Grid.Row="0">
             <TextBlock Text="Line是用来画直线" />
             <TextBlock Text="以所在空间的左上角为原点，四个位置参数：X1，X2，Y1，Y2" />
-            <TextBlock Text="X1是左边的竖线的起始位置，X2是右边的终点位置，Y1是左边垂直方向的偏移，Y2是右边垂直方向的偏移" />
+            <TextBlock Text="x1,y1是起点，x2,y2是终点" />
             <TextBlock Text="Stroke是颜色，StrokeThickness是线的粗细" />
         </StackPanel>
         <Grid
@@ -24,6 +24,8 @@
             Margin="0,30,0,0"
             ShowGridLines="True">
             <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
@@ -40,15 +42,14 @@
             <Line
                 Grid.Row="1"
                 Stroke="AliceBlue"
-                StrokeThickness="20"
-                X1="60"
-                Y1="5"
-                Y2="5" />
+                StrokeThickness="10"
+                X1="10"
+                X2="30"
+                Y1="20" />
             <Line
                 Grid.Row="2"
-                HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Stroke="AliceBlue"
+                Stroke="Beige"
                 StrokeThickness="20"
                 X1="10"
                 X2="10"
@@ -57,103 +58,56 @@
                     <Style TargetType="{x:Type Line}">
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="StrokeThickness" Value="10" />
                                 <Setter Property="Stroke" Value="AliceBlue" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
                 </Line.Style>
             </Line>
-
-            <Grid
+            <Line
                 Grid.Row="3"
-                Width="100"
-                Height="40">
-                <Border IsEnabled="False">
-                    <Grid x:Name="gridLayout" Background="Transparent">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="20" />
-                        </Grid.ColumnDefinitions>
-                        <ToggleButton
-                            x:Name="ToggleButton"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="2"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                            HorizontalContentAlignment="Right"
-                            Background="Gray"
-                            BorderBrush="Gray"
-                            BorderThickness="1"
-                            Focusable="False"
-                            Foreground="Red"
-                            IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                            IsTabStop="False">
-                            <ToggleButton.Style>
-                                <Style TargetType="{x:Type ToggleButton}">
-                                    <Setter Property="Foreground" Value="#FF333333" />
-                                    <Setter Property="BorderThickness" Value="1" />
-                                    <Setter Property="Padding" Value="2" />
-                                    <Setter Property="Cursor" Value="Hand" />
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type ToggleButton}">
-                                                <Grid>
-                                                    <Border x:Name="BackgroundGradient" Margin="0">
-                                                        <Border.Background>
-                                                            <SolidColorBrush Color="{TemplateBinding Background}" />
-                                                        </Border.Background>
-                                                        <Border
-                                                            Width="16"
-                                                            Height="{TemplateBinding Height}"
-                                                            HorizontalAlignment="Right"
-                                                            VerticalAlignment="Stretch"
-                                                            Background="#d9dbdb"
-                                                            CornerRadius="0,4,4,0">
-                                                            <Path
-                                                                x:Name="BtnArrowForeground"
-                                                                Width="16"
-                                                                HorizontalAlignment="Center"
-                                                                VerticalAlignment="Center"
-                                                                Data="M4,2 L8,6 12,2"
-                                                                Stroke="Black" />
-                                                        </Border>
-                                                    </Border>
-                                                    <ContentPresenter />
-                                                </Grid>
-                                                <!--<ControlTemplate.Triggers>
-                                                    <DataTrigger Binding="{Binding ElementName=CheckBox, Path=IsChecked}" Value="false"/>
-                                                </ControlTemplate.Triggers>-->
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsEnabled" Value="false">
-                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </ToggleButton.Style>
-                        </ToggleButton>
-                        <Rectangle
-                            x:Name="DisabledVisualElement"
-                            Fill="#ABABAB"
-                            IsHitTestVisible="False"
-                            Opacity="1" />
-                        <TextBox Grid.Column="0" Text="2222" />
-
-                    </Grid>
-                    <Border.Style>
-                        <Style TargetType="{x:Type Border}">
-                            <Style.Triggers>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="Background" Value="#ABABAB" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Border.Style>
-                </Border>
-            </Grid>
-
+                VerticalAlignment="Center"
+                Stroke="AntiqueWhite"
+                StrokeDashArray="2"
+                StrokeDashCap="Round"
+                StrokeThickness="10"
+                X1="10"
+                X2="200" />
+            <Line
+                Grid.Row="3"
+                Margin="0,60,0,0"
+                VerticalAlignment="Center"
+                Stroke="AntiqueWhite"
+                StrokeDashArray="2"
+                StrokeThickness="10"
+                X1="10"
+                X2="200" />
+            <Line
+                Grid.Row="4"
+                VerticalAlignment="Center"
+                Stroke="Beige"
+                StrokeDashCap="Flat"
+                StrokeEndLineCap="Triangle"
+                StrokeStartLineCap="Round"
+                StrokeThickness="10"
+                X1="10"
+                X2="200" />
+            <Line
+                Grid.Row="5"
+                VerticalAlignment="Center"
+                StrokeDashCap="Flat"
+                StrokeEndLineCap="Round"
+                StrokeThickness="10"
+                X1="10"
+                X2="300">
+                <Line.Stroke>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="red" />
+                        <GradientStop Offset="1" />
+                    </LinearGradientBrush>
+                </Line.Stroke>
+            </Line>
         </Grid>
     </Grid>
 </UserControl>
