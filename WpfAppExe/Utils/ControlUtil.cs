@@ -13,6 +13,7 @@ namespace WpfAppExe.Utils
 
         public static void GetControlList<T>(DependencyObject control,IList<T> lst) where T : DependencyObject
         {
+            int count = VisualTreeHelper.GetChildrenCount(control);
             for (int i = 0; i <= VisualTreeHelper.GetChildrenCount(control) - 1; i++)
             {
                 var child = VisualTreeHelper.GetChild(control,i);

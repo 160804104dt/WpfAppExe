@@ -92,7 +92,6 @@ namespace WpfAppExe.ViewModels
                 {
                     MessageBox.Show("用户名或密码不正确");
                     ShowWindow2Request.Raise(new CommonNotification());
-                    Window window = GetWindow();
                 }
             });
         }

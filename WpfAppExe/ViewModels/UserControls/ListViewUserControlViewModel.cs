@@ -10,11 +10,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using WpfAppExe.Core;
-using WpfAppExe.Manager;
 
 namespace WpfAppExe.ViewModels.UserControls
 {
-    public class DataGridUserControlViewModel:ViewModelBase
+    public class ListViewUserControlViewModel: ViewModelBase
     {
         public ListCollectionView listCollectionView { get; set; }
 

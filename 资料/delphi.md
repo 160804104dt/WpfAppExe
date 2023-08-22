@@ -63,3 +63,6 @@ end
 
 
 
+[DCC エラー] FrmEmMessageDlg.pas(89): F2051 ユニット uFreeRptPub は異なるバージョン TyohyoRDS.TRpt11110103 によりコンパイルされています：
+
+[DCC错误]FrmEmMessageDlg.pas(89):F2051单元uFreeRptPub由不同版本TyohyoRDS.TRpt11110103编译

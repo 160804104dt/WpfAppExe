@@ -689,6 +689,9 @@ private void ThreadMethod2(object? a)
 
 ```c#
 using System.IO;
+
+string filePath;//文件路径
+string directoryPath;//文件夹路径
 //读取文件
 StreamReader sr = new StreamReader(filePath,Encoding.UTF8);
 string line = sr.ReadLine();//一行一行读
@@ -705,5 +708,43 @@ FileStream fs = new FileStream(filePath,FileMode.Open...)
 StreamWriter sw = new StreamWriter();
 sw.WriteLine(content);
 sw.Close();
+
+File.Exists(filePath);//判断文件是否存在
+File.Create(filePath);//创建文件
+FileInfo fileInfo = new FileInfo(filePath);//生成文件的详细信息
+
+string dirPath = Path.GetDirectoryName(filePath);//通过文件名获得文件夹
+Directory.Exists(dirPath);//判断文件夹是否存在
+Directory.CreateDirectory(dirPath);//创建文件夹
+DirectoryInfo dirInfo = new DirectoryInfo(dirPath);//生成文件夹的具体信息
+
 ```
+
+#### 十六、修饰符
+
+访问修饰符用于控制类，字段，属性，方法等的访问权限
+
+public：在任何地方都可以访问
+
+作用域：字段，方法，属性，类，接口，结构
+
+private：只能在类中或者结构体中被访问
+
+作用域：字段，方法，属性，嵌套类型
+
+protected：只能在类（结构体）中或者继承类（结构体）中访问
+
+作用域：字段，方法，属性，嵌套类型
+
+internal：只能在同一个程序集中访问
+
+作用域：类，接口，接口，枚举，嵌套类型
+
+protected internal：只能在同一个程序集中访问，或者在类以及子类中访问
+
+作用域：字段，方法，属性，嵌套类型
+
+#### 十七、事件
+
+事件是一种安全性的委托
 

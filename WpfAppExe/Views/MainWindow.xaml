@@ -107,6 +107,18 @@
                 Command="{Binding Row4Command, Mode=OneWay}"
                 CommandParameter="5"
                 Content="Task" />
+            <Button
+                Command="{Binding Row4Command, Mode=OneWay}"
+                CommandParameter="6"
+                Content="Event" />
+            <Button
+                Command="{Binding Row4Command, Mode=OneWay}"
+                CommandParameter="7"
+                Content="Enum" />
+            <Button
+                Command="{Binding MyCommand, Mode=OneWay}"
+                CommandParameter="8"
+                Content="Command" />
         </StackPanel>
         <StackPanel Grid.Row="4" Orientation="Horizontal">
             <Button

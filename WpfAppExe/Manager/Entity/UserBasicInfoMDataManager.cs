@@ -28,7 +28,6 @@ namespace WpfAppExe.Manager.Entity
             if (!IsLoaded)
             {
                 List<UserBasicInfoMDto> list = new List<UserBasicInfoMDto>();
-
                 string connStr = "server=192.168.0.169;username=postgres;password=postgres;database=APPLICATION";
                 NpgsqlConnection connection = new NpgsqlConnection(connStr);
                 try

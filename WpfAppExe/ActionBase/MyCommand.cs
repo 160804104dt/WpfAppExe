@@ -9,22 +9,25 @@ namespace WpfAppExe.ActionBase
 {
     public class MyCommand : ICommand
     {
-        private readonly Action action;
-        public MyCommand(Action action)
+        private readonly Action<object> execAction;
+        private readonly Func<object, bool> changeFunc;
+
+        public MyCommand(Action<object> execAction, Func<object, bool> changeFunc)
         {
-            this.action = action;
+            this.execAction = execAction;
+            this.changeFunc = changeFunc;
         }
 
         public event EventHandler? CanExecuteChanged;
 
         public bool CanExecute(object? parameter)
         {
-            return true;
+            return changeFunc.Invoke(parameter);
         }
 
         public void Execute(object? parameter)
         {
-            this.action.Invoke();
+            execAction.Invoke(parameter);
         }
     }
 }

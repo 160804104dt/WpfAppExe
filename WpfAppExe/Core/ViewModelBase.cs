@@ -461,12 +461,14 @@ namespace WpfAppExe.Core
             return true;
         }
 
-        public List<T> GetControlList<T>()
+        public IList<T> GetControlList<T>() where T:FrameworkElement
         {
             var window = GetWindow();
+            IList<T> list = new List<T>();
             if (window != null)
             {
-
+                ControlUtil.GetControlList(window, list);
+                return list;
             }
             return null;
         }

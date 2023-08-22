@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -15,8 +16,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using WpfAppExe.ActionBase;
 using WpfAppExe.Core;
+using WpfAppExe.Enum;
 using WpfAppExe.Views;
+using static WpfAppExe.Enum.EnumConstant;
 
 namespace WpfAppExe.ViewModels
 {
@@ -35,6 +39,7 @@ namespace WpfAppExe.ViewModels
 
         public BindableClass bindableClass { get; set; } = new BindableClass();
 
+        public ICommand MyCommand => new MyCommand(MyAction, MyCanExec);
         /// <summary>
         /// 冒泡排序
         /// </summary>
@@ -91,6 +96,23 @@ namespace WpfAppExe.ViewModels
             thread2.Start(2);
             thread3.Start();
             thread4.Start();
+
+            string filePath = "..\\..\\data\\1.jpg";
+            string dirPath = Path.GetDirectoryName(filePath);
+
+            if (!Directory.Exists(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+                DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
+                dirPath = dirInfo.FullName;
+            }
+
+            if (!File.Exists(filePath))
+            {
+                File.Create(filePath);
+                FileInfo fileInfo = new FileInfo(filePath);
+                string s = fileInfo.FullName;
+            }
         }
 
         protected override void RegisterCommands()
@@ -235,6 +257,21 @@ namespace WpfAppExe.ViewModels
                         {
                             return new HokenshaNoMDto();
                         }));
+                    }
+                    else if (selectedIndex == "6")
+                    {
+
+                    }
+                    else if (selectedIndex == "7")
+                    {
+                        var code = YouhouZaikeiCode.Naiteki.GetCode();
+                        var name = YouhouZaikeiCode.Naiteki.GetDescription();
+
+                        var code1 = YTSize.MiddleTZ.GetCode();
+                        var name1 = YTSize.MiddleTZ.GetDescription();
+                    }
+                    else if (selectedIndex == "8")
+                    {
                     }
                 }
             });
@@ -793,6 +830,8 @@ namespace WpfAppExe.ViewModels
             {
                 dosth();
                 System.Diagnostics.Debug.WriteLine("2");
+                MyStruct myStruct = new MyStruct();
+                myStruct.age = 5;
             }
         }
         #endregion
@@ -802,6 +841,26 @@ namespace WpfAppExe.ViewModels
         /// </summary>
         private void Callback() { System.Diagnostics.Debug.WriteLine("执行回调"); }
         #endregion
+
+        #region Task
+        #endregion
+
+        #region 事件
+        event delegate1 myEvent;
+        #endregion
+
+        #region 命令
+        public void MyAction(object parameter)
+        {
+            Debug.WriteLine("这是自定义的命令");
+        }
+
+        public bool MyCanExec(object parameter)
+        {
+            return true;
+        }
+        #endregion
+
     }
 
     public class Class1
@@ -853,4 +912,26 @@ namespace WpfAppExe.ViewModels
         public string Name { get => name; set => SetProperty(ref name, value);}
     }
     #endregion
+
+    public struct MyStruct:MyInterface
+    {
+        public int age;
+        public string name;
+
+        public void GetName(int na)
+        {
+            Console.WriteLine(na);
+        }
+
+        public void SayHello()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public interface MyInterface
+    {
+       void SayHello();
+    }
+
 }

@@ -42,6 +42,7 @@ namespace WpfAppExe.ViewModels
             AncestorCommand.Subscribe(o =>
             {
                 MessageBox.Show("这是FindAncestor，向上找的内容");
+                var Buttonlist = GetControlList<System.Windows.Controls.Button>();
             });
 
         }
