@@ -10,6 +10,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,6 +30,8 @@ namespace WpfAppExe.ViewModels
         public ReactiveCommand ClickCommand { get; set; } = new ReactiveCommand();
         public ReactiveCommand Row4Command { get; set; } = new ReactiveCommand();
         public ReactiveCommand SortCommand { get; set; } = new ReactiveCommand();
+        public ReactiveCommand LayoutCommand { get; set; } = new ReactiveCommand();
+        public ReactiveCommand SocketCommand { get; set; } = new ReactiveCommand();
         public ReactiveCommand PreviewKeyDownCommand { get; set; } = new ReactiveCommand();
 
         int[] array = new int[11] { 5, 3, 7, 6, 4, 1, 0, 2, 9, 10, 8 };
@@ -372,6 +375,30 @@ namespace WpfAppExe.ViewModels
                 }
             });
 
+            LayoutCommand.Subscribe(o =>
+            {
+                if (o is string selectedIndex)
+                {
+                    switch (selectedIndex)
+                    {
+                        case "1":
+                            LayoutWindow layoutWindow = new LayoutWindow();
+                            layoutWindow.ShowDialog();
+                            break;
+                    }
+                }
+            });
+
+            SocketCommand.Subscribe(o =>
+            {
+                System.Diagnostics.Debug.WriteLine("Client Running...");
+                string msg = "这个是客户端的消息";
+                string fileName = Path.Combine(Environment.CurrentDirectory, "test.jpg");
+                string str1 = SendPictures(fileName, msg);
+                str1 = str1 + "#" + str1 + "#" + str1 + "#" + str1 + "#" + str1;
+                Send(str1);
+            });
+
             PreviewKeyDownCommand.Subscribe(o =>
             {
                 if(o is KeyEventArgs e)
@@ -696,7 +723,7 @@ namespace WpfAppExe.ViewModels
         //委托定义
         delegate string delegate1(int a, int b);
         //具体调用函数
-        private string d1Func(int a, int b)
+        private static string d1Func(int a, int b)
         {
             return (a + b).ToString();
         }
@@ -714,6 +741,11 @@ namespace WpfAppExe.ViewModels
         /// lambda表达式创建委托变量
         /// </summary>
         delegate1 d1Lambda = (a, b) => { return (a + b).ToString(); };
+
+        delegate1 d1 = new delegate1((x, y) =>
+        {
+            return (x + y).ToString();
+        });
 
         /// <summary>
         /// 无参数，无返回值的委托
@@ -756,6 +788,7 @@ namespace WpfAppExe.ViewModels
 
         Action<int, int> action5 = (a, b) => Console.WriteLine(a + b);
 
+       
         #endregion
 
         #region Func委托 Func委托有返回类型
@@ -779,6 +812,7 @@ namespace WpfAppExe.ViewModels
             return a;
         }
 
+        Func<int, int,string> action6 = new Func<int, int,string>(d1Func);
         #endregion
 
         #endregion
@@ -846,7 +880,7 @@ namespace WpfAppExe.ViewModels
         #endregion
 
         #region 事件
-        event delegate1 myEvent;
+        //event delegate1 myEvent;
         #endregion
 
         #region 命令
@@ -858,6 +892,48 @@ namespace WpfAppExe.ViewModels
         public bool MyCanExec(object parameter)
         {
             return true;
+        }
+        #endregion
+
+        #region Socket
+
+        private static string SendPictures(string fileName,string str)
+        {
+            string str1;
+            if (File.Exists(fileName))
+            {
+                FileInfo file = new FileInfo(fileName);
+                var stream = file.OpenRead();
+                byte[] buffer = new byte[file.Length];
+                //
+                stream.Read(buffer,0,Convert.ToInt32(file.Length));
+                str1 = Convert.ToBase64String(buffer);
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("文件不存在");
+                str1 = "";
+            }
+            str1 = str + ")" + str1;
+            return str1;
+        }
+
+        private static void Send(string str)
+        {
+            TcpClient client = new TcpClient();
+            try
+            {
+                client.Connect("localhost",8500);
+            }
+            catch(Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+            System.Diagnostics.Debug.WriteLine("发送消息");
+            NetworkStream streamToServer = client.GetStream();
+            byte[] buffer1 = Encoding.UTF8.GetBytes(str);
+            streamToServer.Write(buffer1,0,buffer1.Length);
+            client.Close();
         }
         #endregion
 

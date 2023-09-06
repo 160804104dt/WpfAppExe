@@ -29,6 +29,7 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.Resources>
             <Style TargetType="Button">
@@ -161,6 +162,13 @@
                 Command="{Binding SortCommand, Mode=OneWay}"
                 CommandParameter="10"
                 Content="桶排序" />
+        </StackPanel>
+        <StackPanel Grid.Row="5" Orientation="Horizontal">
+            <Button
+                Command="{Binding LayoutCommand, Mode=OneWay}"
+                CommandParameter="1"
+                Content="Layout" />
+            <Button Command="{Binding SocketCommand, Mode=OneWay}" Content="Socket" />
         </StackPanel>
     </Grid>
 </Window>

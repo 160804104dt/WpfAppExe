@@ -24,5 +24,20 @@ namespace WpfAppExe.Views.UserControls
         {
             InitializeComponent();
         }
+
+        private void DataGrid_DragLeave(object sender, DragEventArgs e)
+        {
+
+        }
+
+        private void DataGrid_PreviewDrop(object sender, DragEventArgs e)
+        {
+
+        }
+
+        private void HokenShaNoText_DragEnter(object sender, DragEventArgs e)
+        {
+
+        }
     }
 }

@@ -8,10 +8,19 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid>
+    <Grid ShowGridLines="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70*" />
+            <ColumnDefinition Width="30*" />
+        </Grid.ColumnDefinitions>
         <DataGrid
-            Margin="30,30,30,0"
+            Grid.Column="0"
+            Width="500"
+            Margin="30,30,0,0"
+            HorizontalAlignment="Left"
+            AllowDrop="True"
             AutoGenerateColumns="False"
+            DragDrop.PreviewDrop="DataGrid_PreviewDrop"
             ItemsSource="{Binding listCollectionView, UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.Columns>
                 <DataGridTemplateColumn CanUserResize="False" Header="hokensha_no">
@@ -36,5 +45,15 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <TextBlock
+            x:Name="HokenShaNoText"
+            DragEnter="HokenShaNoText_DragEnter"
+            Grid.Column="1"
+            Text="ttt" />
+        <TextBlock
+            x:Name="HokenshaKanjiNameText"
+            Grid.Column="1"
+            Margin="0,50,0,0"
+            Text="ttt" />
     </Grid>
 </UserControl>

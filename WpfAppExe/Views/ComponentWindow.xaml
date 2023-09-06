@@ -19,11 +19,15 @@
             <TabItem Header="listBox">
                 <uc:ListBoxUserControl DataContext="{Binding ListBoxUserControl.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </TabItem>
-            <TabItem Header="listView" />
+            <TabItem Header="listView">
+                <uc:ListViewUserControl DataContext="{Binding ListViewUserControl.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </TabItem>
             <TabItem Header="DataGrid">
                 <uc:DataGridUserControl DataContext="{Binding DataGridUserControl.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </TabItem>
-            <TabItem Header="XamDataGrid" />
+            <TabItem Header="XamDataGrid">
+                <uc:XamDataGridUserControl DataContext="{Binding XamDataGridUserControl.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </TabItem>
             <TabItem Header="Line直线">
                 <uc:LineUserControl />
             </TabItem>
