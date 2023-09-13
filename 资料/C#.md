@@ -555,9 +555,9 @@ eg：rb?c 可以匹配rc，rbc
 
 
 
-#### 十、面向对象六大原则
+#### 十、面向对象六大原则（六大设计模式）
 
-##### 1.单一职责原则
+##### 1.单一职责原则（Single Responsibility principle）
 
 一个类只负责一个功能领域中的相应职责，或者可以定义为：就一个类而言，应该只有一个引起它变化的原因
 
@@ -565,15 +565,21 @@ eg：rb?c 可以匹配rc，rbc
 
 
 
-##### 2.开闭原则
+##### 2.开闭原则（Open Closed principle）
 
 一个软件实体应该对扩展开放，对修改关闭；一个软件实体尽量在不修改源代码的情况下进行对外扩展；
 
 需要对系统进行抽象化设计，抽象化是开闭原则的关键；可以为系统定义一个相对稳定的抽象层，将不同的实现行为移至具体的实现层中完成
 
+对扩展开放：系统中的模块，类，方法对于它们的提供者是开放的，可以对系统进行扩展新的功能
+
+对修改关闭：系统中的模块，类，方法对于它们的使用者是关闭的，使用者不会因为提供者新增了功能而做出相应的修改
+
 开闭原则是面向对象设计的目标
 
-##### 3.里氏替换原则
+
+
+##### 3.里氏替换原则（Liskov Substitution principle）
 
 所有引用基类的地方必须能够透明的使用其子类的对象；
 
@@ -587,7 +593,7 @@ eg：rb?c 可以匹配rc，rbc
 
 （2）尽量把父类设计成抽象类或者接口
 
-##### 4.依赖倒置原则
+##### 4.依赖倒置原则（Dependence Inversion principle）
 
 抽象不应该依赖于细节，细节应该依赖于抽象，换言之，要面向接口编程，而不是针对实现编程
 
@@ -595,7 +601,11 @@ eg：rb?c 可以匹配rc，rbc
 
 依赖导致原则基于这样的设计理念：相对于细节的多变性，抽象的东西要稳定的多，以抽象为基础搭建的架构比以细节为基础的架构要稳定的多；
 
+面向接口编程
+
 举例：
+
+在类中需要用到其他类的时候，就需要依赖注入
 
 依赖倒置的三种注入方法：
 
@@ -605,9 +615,130 @@ eg：rb?c 可以匹配rc，rbc
 
 （3）接口注入，在接口方法中声明依赖对象
 
-##### 5.接口隔离原则
+例子：
+
+```c#
+//1.数据库的读写，往数据中添加一条订单
+public class SqlServerDal
+{
+    public void Add()
+    {
+        Console.WriteLine("添加一条新订单");
+    }
+}
+
+//2.定义一个order类，用于逻辑处理
+public class Order
+{
+    private SqlServerDal sqlServerDal = new SqlServerDal();
+
+    public void Add()
+    {
+        sqlServerDal.Add();
+    }
+}
+
+//3.需求发生变更，需要将数据库改成Access，就要重新定义Access类
+public class AccessDal
+{
+    public void Add()
+    {
+        Console.WriteLine("添加一条新订单");
+    }
+}
+
+//Order类中也需要发生变化
+public class Order
+{
+    private AccessDal sqlServerDal = new AccessDal();
+
+    public void Add()
+    {
+        sqlServerDal.Add();
+    }
+}
+//这样耦合度就很高，因为高层模块Order类依赖于了低层模块SqlServerDal和AccessDal，两者都应该依赖于抽象
+//改进
+//定义一个接口DataAccess
+public class SqlServerDal:DataAccess
+{
+    public void Add()
+    {
+        Console.WriteLine("添加一条新订单");
+    }
+}
+
+public class AccessDal: DataAccess
+{
+    public void Add()
+    {
+        Console.WriteLine("添加一条新订单");
+    }
+}
+//修改Order类
+//➀构造函数注入
+public class Order
+{
+    private DataAccess dataAccess;
+
+    public Order(DataAccess dataAccess)
+    {
+        this.dataAccess = dataAccess;
+    }
+    
+    public void Add()
+    {
+        dataAccess.Add();
+    }
+}
+//set方法注入（属性注入）
+public class Order
+{
+    private DataAccess _dataAccess;
+
+    public DataAccess DataAccess
+    {
+        get => _dataAccess;
+        set => _dataAccess = value;
+    }
+
+    public void Add()
+    {
+        DataAccess.Add();
+    }
+}
+//接口方法注入
+public class Order: DependenceInterface
+{
+    private DataAccess _dataAccess;
+
+    public void SetDependence(DataAccess dataAccess)
+    {
+        _dataAccess = dataAccess;
+    }
+
+    public void Add()
+    {
+        _dataAccess.Add();
+    }
+}
+
+//c#中常用的IOC容器是UnityContainer
+IUnityContainer container = new UnityContainer();
+container.RegisterSingleton<DataAccess, AccessDal>();//单例模式
+DataAccess dataAccess = container.Resolve<DataAccess>();
+dataAccess.Add();
+```
+
+
+
+
+
+##### 5.接口隔离原则（Interface Segregation principle）
 
 使用多个专门的接口，而不应该使用单一的总接口，即客户端不应该依赖那些不需要的接口;
+
+另一个定义：一个类对另一个类的依赖应该建立在最小的接口上
 
 在使用接口隔离原则时，我们需要注意控制接口的粒度，接口不能太小，如果太小会导致接口泛滥，不利于维护，接口也不能太大，太大会违背接口隔离原则，使用起来不方便。
 
@@ -615,7 +746,13 @@ eg：rb?c 可以匹配rc，rbc
 
 一个软件实体应当尽可能的少与其他实体发生相互作用
 
+当一个软件实体发生变化时就会尽量减少对其他软件实体的影响
+
 迪米特法则又称最少知识原则
+
+例如：关闭电脑的例子，要关闭电脑正在执行的任务，关闭其他运行程序，关闭显示器，关闭电源
+
+对于人而言只有关闭电脑这一个动作，把其他方法封装在关闭电脑的方法里
 
 
 
@@ -793,3 +930,10 @@ protected internal：只能在同一个程序集中访问，或者在类以及�
 抽象类不能实例化
 
 如果抽象类的子类不是抽象类，必须重写父类抽象类的所有方法
+
+
+
+- 在 8.0 以前的 C# 版本中，接口类似于只有抽象成员的抽象基类。 实现接口的类或结构必须实现其所有成员。
+- 从 C# 8.0 开始，接口可以定义其部分或全部成员的默认实现。 实现接口的类或结构不一定要实现具有默认实现的成员。 有关详细信息，请参阅[默认接口方法](https://learn.microsoft.com/zh-cn/dotnet/csharp/advanced-topics/interface-implementation/default-interface-methods-versions)。
+- 接口无法直接进行实例化。 其成员由实现接口的任何类或结构来实现。
+- 一个类或结构可以实现多个接口。 一个类可以继承一个基类，还可实现一个或多个接口。

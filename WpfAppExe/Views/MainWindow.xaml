@@ -166,9 +166,9 @@
         <StackPanel Grid.Row="5" Orientation="Horizontal">
             <Button
                 Command="{Binding LayoutCommand, Mode=OneWay}"
-                CommandParameter="1"
                 Content="Layout" />
             <Button Command="{Binding SocketCommand, Mode=OneWay}" Content="Socket" />
+            <Button Command="{Binding IOCCommand, Mode=OneWay}" Content="UnityIOC" />
         </StackPanel>
     </Grid>
 </Window>

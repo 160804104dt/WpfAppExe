@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Unity;
 using WpfAppExe.ActionBase;
 using WpfAppExe.Core;
 using WpfAppExe.Enum;
@@ -27,20 +28,27 @@ namespace WpfAppExe.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        #region Command
         public ReactiveCommand ClickCommand { get; set; } = new ReactiveCommand();
         public ReactiveCommand Row4Command { get; set; } = new ReactiveCommand();
         public ReactiveCommand SortCommand { get; set; } = new ReactiveCommand();
         public ReactiveCommand LayoutCommand { get; set; } = new ReactiveCommand();
         public ReactiveCommand SocketCommand { get; set; } = new ReactiveCommand();
+        public ReactiveCommand IOCCommand { get; set; } = new ReactiveCommand();
+        
         public ReactiveCommand PreviewKeyDownCommand { get; set; } = new ReactiveCommand();
+        #endregion
 
+        #region Property
         int[] array = new int[11] { 5, 3, 7, 6, 4, 1, 0, 2, 9, 10, 8 };
 
         public List<HokenshaNoMDto> LinqTestList = new List<HokenshaNoMDto>();
         public List<HokenshaMatomeConfig> LinqTestList1 = new List<HokenshaMatomeConfig>();
-        public NpClass Title { get; set; } = new NpClass() { Name = "李四"};
+
 
         public BindableClass bindableClass { get; set; } = new BindableClass();
+
+        public NpClass Title { get; set; } = new NpClass() { Name = "李四" };
 
         public ICommand MyCommand => new MyCommand(MyAction, MyCanExec);
         /// <summary>
@@ -84,6 +92,9 @@ namespace WpfAppExe.ViewModels
         /// </summary>
         public int[] BucketSortArrays = new int[10000];
 
+        #endregion
+
+        #region override
         protected override void InitData()
         {
             base.InitData();
@@ -399,6 +410,11 @@ namespace WpfAppExe.ViewModels
                 Send(str1);
             });
 
+            IOCCommand.Subscribe(o =>
+            {
+                DIP();
+            });
+
             PreviewKeyDownCommand.Subscribe(o =>
             {
                 if(o is KeyEventArgs e)
@@ -415,6 +431,7 @@ namespace WpfAppExe.ViewModels
                 }
             });
         }
+        #endregion
 
         #region 泛型
         private void Test(int a)
@@ -937,6 +954,20 @@ namespace WpfAppExe.ViewModels
         }
         #endregion
 
+        #region 依赖注入原则
+        private void DIP()
+        {
+            //IUnityContainer container = new UnityContainer();
+            //container.RegisterSingleton<DataAccess, AccessDal>();
+            //DataAccess dataAccess = container.Resolve<DataAccess>();
+            //dataAccess.Add();
+            DataAccess dataAccess = new AccessDal();
+            dataAccess.Add();
+            DataAccess dataAccess1 = new SqlServerDal();
+            dataAccess1.Add();
+        }
+        #endregion
+
     }
 
     public class Class1
@@ -1009,5 +1040,74 @@ namespace WpfAppExe.ViewModels
     {
        void SayHello();
     }
+
+    #region 依赖注入
+    public class A
+    {   
+        //A依赖于B
+        public B b;
+        //public A() 这样写的话，如果B的new方法发生了改变，就需要重写*1的方法，耦合性很高
+        //{
+        //    b = new B(); *1
+        //}
+
+        //public A(B b) 这种方式是构造方法注入
+        //{
+        //    this.b = b;
+        //}
+    }
+
+    public class B
+    {
+
+    }
+
+    public interface People
+    {
+
+    }
+
+    public interface DataAccess
+    {
+        void Add();
+    }
+
+    public class SqlServerDal:DataAccess
+    {
+        public void Add()
+        {
+            Console.WriteLine("添加一条新订单");
+        }
+    }
+
+    //3.需求发生变更，需要将数据库改成Access，就要重新定义Access类
+    public class AccessDal: DataAccess
+    {
+        public void Add()
+        {
+            Console.WriteLine("添加一条新订单");
+        }
+    }
+
+    public interface DependenceInterface
+    {
+        void SetDependence(DataAccess dataAccess);
+    }
+
+    public class Order: DependenceInterface
+    {
+        private DataAccess _dataAccess;
+
+        public void SetDependence(DataAccess dataAccess)
+        {
+            _dataAccess = dataAccess;
+        }
+
+        public void Add()
+        {
+            _dataAccess.Add();
+        }
+    }
+    #endregion
 
 }

@@ -36,5 +36,10 @@ namespace WpfAppExe.Views
         {
             Console.WriteLine(e);
         }
+
+        private void Password_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
     }
 }
