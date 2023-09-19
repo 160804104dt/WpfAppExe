@@ -768,6 +768,308 @@ dataAccess.Add();
 
 行为型模式：类和对象如何交互，及划分责任和算法。
 
+创建型模式：单例模式，原型模式，工厂方法模式，抽象工厂模式，建造者模式
+
+##### **1.单例模式**
+
+```c#
+#region 单例模式 在进程中只有一个实例 饿汉式、懒汉式
+
+    /// <summary>
+    /// 饿汉式
+    /// 缺点：类加载的时候就完成了实例化，如果没用，就会浪费，占用内存
+    /// </summary>
+    //public class Singleton
+    //{
+    //    private static Singleton INSTANCE = new Singleton();
+    //    private Singleton() { }
+
+    //    public static Singleton GetSingleton()
+    //    {
+    //        return INSTANCE;
+    //    }
+    //    public void Test()
+    //    {
+    //        Console.WriteLine("Hello,Singleton!");
+    //    }
+    //}
+
+    /// <summary>
+    /// 懒汉式，用的时候再创建;
+    /// 普通的懒汉式，线程不安全;
+    /// 假设对象还没有被实例化，但是又两个线程同时访问，就会可能出现多次实例化的结果，所以不可用
+    /// </summary>
+    //public class Singleton
+    //{
+    //    private static Singleton instance = null;
+    //    private Singleton() { }
+    //    public static Singleton GetSingleton()
+    //    {
+    //        if (instance == null)//单if判null
+    //        {
+    //            instance = new Singleton();
+    //        }
+    //        return instance;
+    //    }
+
+    //    public void Test()
+    //    {
+    //        Console.WriteLine("Hello,Singleton!");
+    //    }
+    //}
+
+
+    /// <summary>
+    /// if判null，外层加lock
+    /// lock作用，保证进入lock的代码块是单线程的
+    /// 不推荐：多线程通过lock变成单线程，无法利用多线程的优势，意义不大
+    /// </summary>
+    //public class Singleton
+    //{
+    //    private static Singleton singleton;
+    //    private Singleton() { }
+
+    //    private static readonly object _instanceLock = new object();//声明静态lock对象
+    //    public static Singleton GetSingleton()
+    //    {
+    //        lock (_instanceLock)
+    //        {
+    //            if (singleton == null)
+    //            {
+    //                singleton = new Singleton();
+    //            }
+    //        }
+    //        return singleton;
+    //    }
+    //    public void Test()
+    //    {
+    //        Console.WriteLine("Hello,Singleton!");
+    //    }
+    //}
+
+    /// <summary>
+    /// lock内外均加if判null
+    /// 保证单例，而且多线程
+    /// </summary>
+    //public class Singleton
+    //{
+    //    private static Singleton singleton;
+    //    private Singleton() { }
+
+    //    private static readonly object _instanceLock = new object();
+
+    //    public static Singleton GetSingleton()
+    //    {
+    //        if (singleton == null)
+    //        {
+    //            lock (_instanceLock)
+    //            {
+    //                if (singleton == null)
+    //                {
+    //                    singleton = new Singleton();
+    //                }
+    //            }
+    //        }
+    //        return singleton;
+    //    }
+    //    public void Test()
+    //    {
+    //        Console.WriteLine("Hello,Singleton!");
+    //    }
+    //}
+    #endregion
+```
+
+##### 2.工厂方法模式，抽象工厂模式
+
+```c#
+#region 工厂方法模式
+    ///<summary>
+    /// 案例：想要造华为手机，小米手机
+    /// </summary>
+
+    #region 简单工厂模式
+    //public interface IPhone
+    //{
+    //    void TurnOn();
+    //}
+
+    //public class HuaWeiPhone : IPhone
+    //{
+    //    public void TurnOn()
+    //    {
+    //        Console.WriteLine("华为开机");
+    //    }
+    //}
+
+    //public class XiaoMiPhone : IPhone
+    //{
+    //    public void TurnOn()
+    //    {
+    //        Console.WriteLine("小米开机");
+    //    }
+    //}
+    #endregion
+
+    #region 工厂方法模式
+    //考虑到制造手机的厂商有很多，所以提出来工厂方法模式
+    //public interface IPhone
+    //{
+    //    void TurnOn();
+    //}
+
+    //public class HuaWeiPhone : IPhone
+    //{
+    //    public void TurnOn()
+    //    {
+    //        Console.WriteLine("华为开机");
+    //    }
+    //}
+
+    //public class XiaoMiPhone : IPhone
+    //{
+    //    public void TurnOn()
+    //    {
+    //        Console.WriteLine("小米开机");
+    //    }
+    //}
+
+    //public interface IFactory
+    //{
+    //    IPhone CreatePhone();
+    //}
+
+    ////制造华为的工厂
+    //public class HuaWeiFactory : IFactory
+    //{
+    //    public IPhone CreatePhone()
+    //    {
+    //        return new HuaWeiPhone();
+    //    }
+    //}
+
+    ////制造小米的工厂
+    //public class XiaomiFactory : IFactory
+    //{
+    //    public IPhone CreatePhone()
+    //    {
+    //        return new HuaWeiPhone();
+    //    }
+    //}
+    #endregion
+
+    //下面需求变了，需要这个工厂不仅可以制造手机，也可以制造其他产品
+    ///<summary>
+    /// 抽象工厂模式允许客户端创建一组相关的产品
+    /// 四个组成部分：抽象工厂，具体工厂，抽象产品，具体产品
+    /// </summary>
+    public interface IFactory
+    {
+        IPhone CreatePhone();
+        ITV CreateTV();
+    }
+
+    public class HuaWeiFactory : IFactory
+    {
+        public IPhone CreatePhone()
+        {
+            return new HuaWeiPhone();
+        }
+
+        public ITV CreateTV()
+        {
+            return new HuaWeiTV();
+        }
+    }
+
+    public interface IPhone
+    {
+        void TurnOn();
+    }
+    public interface ITV
+    {
+        void TurnOn();
+    }
+
+    public class HuaWeiPhone : IPhone
+    {
+        public void TurnOn()
+        {
+            Console.WriteLine("华为手机");
+        }
+    }
+
+    public class HuaWeiTV : ITV
+    {
+        public void TurnOn()
+        {
+            Console.WriteLine("华为电视");
+        }
+    }
+    #endregion
+```
+
+抽象工厂模式和工厂方法模式的比较：
+
+1.抽象工厂适合创建一组依赖的情况，工厂方法模式适合创建单个对象的情况
+
+2.抽象工厂包含抽象工厂，具体工厂，抽象产品，具体产品；工厂方法包含工厂接口，具体工厂，产品接口
+
+优点：促进程序的松散耦合，因为是和抽象工厂接口进行交互，而不是和具体工厂具体产品进行交互
+
+缺点：当添加新的产品时，抽象工厂具体工厂都要修改，导致代码难以维护
+
+##### 3.原型模式
+
+模式中的角色
+
+2.1 Prototype（抽象原型类）：它是声明克隆方法的接口，是所有具体原型类的公共父类，可以是抽象类也可以是接口，甚至还可以是具体实现类。
+
+2.2 ConcretePrototype（具体原型类）：它实现在抽象原型类中声明的克隆方法，在克隆方法中返回自己的一个克隆对象。
+
+2.3 Client（客户类）：让一个原型对象克隆自身从而创建一个新的对象
+
+```c#
+public class Resume : ICloneable
+{
+    public string name;
+    public string birthday;
+    public string sex;
+    public string school;
+    public string timeArea;
+    public string company;
+
+    public Resume()
+    {
+
+    }
+
+    public Resume(string name, string birthday, string sex, string school, string timeArea, string company)
+    {
+        this.name = name;
+        this.birthday = birthday;
+        this.sex = sex;
+        this.school = school;
+        this.timeArea = timeArea;
+        this.company = company;
+    }
+
+    public object Clone()
+    {
+        return this.MemberwiseClone();
+    }
+}
+
+Resume resume = new Resume("1","2","3","4","5","6");
+Resume resume1 = resume.Clone() as Resume;
+```
+
+优点：简化了对象的创建
+
+可以使用深克隆保存对象的状态，使用原型模式复制一份并且保存下来
+
+缺点：需要给每一个类准备一个克隆方法，需要改造类时，就要修改源代码，违背了开闭原则
+
 
 
 #### 十二、多线程
@@ -934,6 +1236,6 @@ protected internal：只能在同一个程序集中访问，或者在类以及�
 
 
 - 在 8.0 以前的 C# 版本中，接口类似于只有抽象成员的抽象基类。 实现接口的类或结构必须实现其所有成员。
-- 从 C# 8.0 开始，接口可以定义其部分或全部成员的默认实现。 实现接口的类或结构不一定要实现具有默认实现的成员。 有关详细信息，请参阅[默认接口方法](https://learn.microsoft.com/zh-cn/dotnet/csharp/advanced-topics/interface-implementation/default-interface-methods-versions)。
+- 从 C# 8.0 开始，接口可以定义其部分或全部成员的默认实现。 实现接口的类或结构不一定要实现具有默认实现的成员。 
 - 接口无法直接进行实例化。 其成员由实现接口的任何类或结构来实现。
 - 一个类或结构可以实现多个接口。 一个类可以继承一个基类，还可实现一个或多个接口。
