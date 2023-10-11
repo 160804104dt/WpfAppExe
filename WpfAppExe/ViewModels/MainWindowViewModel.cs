@@ -92,6 +92,9 @@ namespace WpfAppExe.ViewModels
         /// </summary>
         public int[] BucketSortArrays = new int[10000];
 
+        public ReactivePropertySlim<int?> Row1Select { get; set; } = new ReactivePropertySlim<int?>();
+
+        public ReactivePropertySlim<string> Row1SelectedItem { get; set; } = new ReactivePropertySlim<string>();
         #endregion
 
         #region override
@@ -428,6 +431,22 @@ namespace WpfAppExe.ViewModels
                             button.MoveFocus(request);
                         }
                     }
+                }
+            });
+
+            Row1Select.Subscribe(o =>
+            {
+                if (Row1Select != null)
+                {
+
+                }
+            });
+
+            Row1SelectedItem.Subscribe(o =>
+            {
+                if (Row1SelectedItem != null && Row1SelectedItem.Value != null)
+                {
+
                 }
             });
         }

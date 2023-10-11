@@ -81,7 +81,7 @@ namespace WpfAppExe.ViewModels
 
             LoginCommand.Subscribe(o =>
             {
-                List<UserBasicInfoMDto> list = new List<UserBasicInfoMDto>();
+                /*List<UserBasicInfoMDto> list = new List<UserBasicInfoMDto>();
                 GlobalManager.GetUserBasicInfoMDataManager().SellectAll();
                 UserBasicInfoMDto user = GlobalManager.GetUserBasicInfoMDataManager().GetUserBasicInfoMDto(UserName.Value, Password.Value);
                 if(user != null)
@@ -92,7 +92,9 @@ namespace WpfAppExe.ViewModels
                 {
                     MessageBox.Show("用户名或密码不正确");
                     ShowWindow2Request.Raise(new CommonNotification());
-                }
+                }*/
+                Window1 window1 = new Window1();
+                window1.ShowDialog();
             });
         }
     }

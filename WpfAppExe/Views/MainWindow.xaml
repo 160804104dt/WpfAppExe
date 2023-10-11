@@ -51,6 +51,31 @@
                 CommandParameter="1"
                 Content="ListView" />
         </StackPanel>
+        <ComboBox
+            Width="100"
+            Height="30"
+            Margin="0,0,20,0"
+            HorizontalAlignment="Right"
+            BorderBrush="Red"
+            BorderThickness="1">
+            <ComboBoxItem>
+                <TextBlock Text="111" />
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <TextBlock Text="222" />
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <TextBox Width="60" Height="20" />
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <Button
+                    Width="60"
+                    Height="20"
+                    Background="AliceBlue"
+                    Content="222"
+                    Foreground="Black" />
+            </ComboBoxItem>
+        </ComboBox>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Button
                 Command="{Binding ClickCommand, Mode=OneWay}"
@@ -164,9 +189,7 @@
                 Content="桶排序" />
         </StackPanel>
         <StackPanel Grid.Row="5" Orientation="Horizontal">
-            <Button
-                Command="{Binding LayoutCommand, Mode=OneWay}"
-                Content="Layout" />
+            <Button Command="{Binding LayoutCommand, Mode=OneWay}" Content="Layout" />
             <Button Command="{Binding SocketCommand, Mode=OneWay}" Content="Socket" />
             <Button Command="{Binding IOCCommand, Mode=OneWay}" Content="UnityIOC" />
         </StackPanel>
