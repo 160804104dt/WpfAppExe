@@ -120,16 +120,6 @@ Console.WriteLine($"    was {weatherData.LowTemp} and {weatherData.HighTemp}.");
 
 
 
-##### 2、协变，逆变
-
-子类向父类转变是协变，父类向子类转化是逆变
-
-协变对应修饰符是out，逆变对应修饰符是in
-
-用in和ref修饰参数时，使用前必须要赋值，使用out修饰，可以不用赋值
-
-
-
 #### 四、lambda表达式
 
 ##### 形式
@@ -563,8 +553,6 @@ eg：rb?c 可以匹配rc，rbc
 
 单一职责原则是实现高内聚，低耦合的指导方针。
 
-
-
 ##### 2.开闭原则（Open Closed principle）
 
 一个软件实体应该对扩展开放，对修改关闭；一个软件实体尽量在不修改源代码的情况下进行对外扩展；
@@ -576,8 +564,6 @@ eg：rb?c 可以匹配rc，rbc
 对修改关闭：系统中的模块，类，方法对于它们的使用者是关闭的，使用者不会因为提供者新增了功能而做出相应的修改
 
 开闭原则是面向对象设计的目标
-
-
 
 ##### 3.里氏替换原则（Liskov Substitution principle）
 
@@ -600,6 +586,10 @@ eg：rb?c 可以匹配rc，rbc
 高层模块不应该依赖于低层模块，二者都应该依赖其抽象
 
 依赖导致原则基于这样的设计理念：相对于细节的多变性，抽象的东西要稳定的多，以抽象为基础搭建的架构比以细节为基础的架构要稳定的多；
+
+高层模块就是封装了其他许多的模块，低层模块就是不可分割的模块
+
+依赖倒置原则是指的模块间的依赖是通过抽象来发生的,实现类之间不发生直接的依赖关系,其依赖关系是通过接口时来实现的,这就是俗称的 
 
 面向接口编程
 
@@ -658,6 +648,7 @@ public class Order
     }
 }
 //这样耦合度就很高，因为高层模块Order类依赖于了低层模块SqlServerDal和AccessDal，两者都应该依赖于抽象
+
 //改进
 //定义一个接口DataAccess
 public class SqlServerDal:DataAccess
@@ -729,10 +720,6 @@ container.RegisterSingleton<DataAccess, AccessDal>();//单例模式
 DataAccess dataAccess = container.Resolve<DataAccess>();
 dataAccess.Add();
 ```
-
-
-
-
 
 ##### 5.接口隔离原则（Interface Segregation principle）
 
@@ -1162,6 +1149,7 @@ private void ThreadMethod2(object? a)
 {
     System.Diagnostics.Debug.WriteLine("this is new thread with paramater");
 }
+
 ```
 
 Thread.Sleep();
@@ -1184,6 +1172,109 @@ task可以通过CancellationTokenSource类来取消任务，thread运行时，�
 
 task能够方便捕捉到异常，thread在父方法中无法捕捉到异常
 
+Task.Delay()不会阻塞主线程，一般和ContinueWith联合使用，等待一段时间后执行ContinueWith里面的事情
+
+
+
+Thread.Sleep()会阻塞主线程
+
+
+
+竞态条件：多个线程在访问共享资源时，由于执行顺序的不确定性，会导致程序结果和预计的不一样
+
+线程的状态：就绪，运行，等待，阻塞，终止
+
+```c#
+thread.Start();线程开启
+thread.Suspend(); //表示线程暂停，现在已弃用，NetCore平台已经不支持
+thread.Resume();  //线程恢复执行，弃用，NetCore平台已经不支持
+thread.Abort();   //线程停止，子线程对外抛出了一个异常，线程是无法从外部去终止的
+Thread.ResetAbort();//停止的线程继续去执行
+thread.Join();//主线程等待，直到当前线程执行完毕
+thread.Join(500);//主线程等待500毫秒，不管当前线程执行是否完毕，都继续往后执行
+
+//在主线程中给ThreadStatic特性标注的变量赋值，则只有主线程能访问该变量
+
+Task task1 = new Task(()=> 
+{
+    for (int i = 0; i < 10000; i++)
+        count++;
+});
+task1.Start();
+
+Task.Run(()=>
+{
+	cw("");    
+})
+
+TaskFactory factory = Task.Factory;
+factory.StartNew(() =>
+{                 
+	Console.WriteLine("张三");
+});
+Task<int> task3 = factory.StartNew<int>(() =>
+{
+	return DateTime.Now.Year;
+});
+
+task1.RunSynchronously();//同步方法
+
+//线程阻塞
+task.Wait()//会阻塞其他线程，直到它完成
+Task.WaitAll();
+Task.WaitAny();
+//When不会阻塞线程
+Task.WhenAll(tasks.ToArray()).ContinueWith((o) => { Console.WriteLine("运行结束"); });
+Task.WhenAny(tasks.ToArray()).ContinueWith((o) => { Console.WriteLine("运行结束"); });
+
+//多线程异常处理
+多线程内部发生异常后，try-catch无法捕捉到异常
+如何捕捉到异常：需要做线程的等待
+//1.Task.WaitAll()
+//用try-catch包裹
+在try外面用Task.WaitAll()等待线程，例如
+ List<Task> taskList = new List<Task>();
+try
+{
+    for(int i = 0; i < 20; i++)
+    {
+        Task task = Task.Run(() => 
+                             {
+                                 if(i == 2)
+                                 {
+                                     throw new Exception("第二个异常了");
+                                 }
+                                 else if (i == 8)
+                                 {
+                                     throw new Exception("第8个异常了");
+                                 }
+                                 else if (i == 12)
+                                 {
+                                     throw new Exception("第12个异常了");
+                                 }
+                             });
+        taskList.Add(task);
+    }
+    Task.WaitAll(taskList.ToArray());
+}
+catch(AggregateException ex)
+{
+    foreach(var item in ex.InnerExceptions)
+    {
+        System.Diagnostics.Debug.WriteLine(item.Message);
+    }
+}
+//捕捉到的异常是一个AggregateException类型的异常，包含有多线程内部异常的集合
+
+//线程取消
+//线程不能从外部取消，只能自己取消自己
+//CancellationTokenSource，提供了IsCancellationRequested布尔型的属性，默认为false，true表示线程取消
+CancellationTokenSource cts = new CancellationTokenSource();
+cts.Cancel();
+```
+
+
+
 #### 十三、泛型
 
 泛型是为了解决代码重用的问题而提出的
@@ -1194,17 +1285,158 @@ task能够方便捕捉到异常，thread在父方法中无法捕捉到异常
 
 在处理引用类型时，避免了强制类型转换
 
+泛型可用的地方：自定义类，方法，接口，委托，约束
 
+泛型约束：
+
+在泛型方法后面写where T:
+
+new()约束：where T :new ()表示T一定是要有一个无参的构造函数
+
+struct值类型约束：struct,int,double,float等等
+
+例如：where T:struct
+
+class引用类型约束：数字，类，接口，委托，object
+
+where T:class，where T:class,new()
+
+自定义类型约束：自己定义的类型
+
+```c#
+class MyGeneric<T,K,C> 
+where T:struct 
+where K:class,new() 
+where C:Student,new()
+{
+   
+}
+```
+
+<font color="blue">注意：new()约束一定要写在最后面</font>
 
 #### 十四、排序算法
 
+![1700306878068](C:\Users\丁涛\AppData\Roaming\Typora\typora-user-images\1700306878068.png)
+
 1、冒泡排序
+
+第一轮从一个数开始，相邻的两个数进行比较交换，第一轮过后最大的数到了最后一个；第二轮从第二个数继续比较
 
 2、选择排序
 
-3、快速排序
+- 数组的初始状态：有序区为空，无序区为[0,…,n]
+- 每次找到无序区里的最小元素，添加到有序区的最后
+- 重复前面步骤，直到整个数组排序完成
 
-4、
+3、插入排序
+
+整个数组分为**左边部分有序元素集合**和**右边部分无序元素集合**
+
+一开始从索引为一的元素开始逐渐递增与有序集合进行比较
+
+将未排序的元素一个一个地插入到有序的集合中，插入时把所有有序集合从后向前扫一遍，找到合适的位置插入
+
+4、希尔排序
+
+希尔排序简单的来说就是一种改进的插入排序算法，它通过将待排序的元素分成若干个子序列，然后对每个子序列进行插入排序，最终逐步缩小子序列的间隔，直到整个序列变得有序。希尔排序的主要思想是通过插入排序的优势，减小逆序对的距离，从而提高排序效率。
+
+1. 首先要确定一个增量序列（初始间隔），将待排序序列分成多个子序列。
+2. 对每个子序列分别进行插入排序，即在子序列内部进行排序。
+3. 逐步减小增量，重复步骤2，直到增量为1，即完成最后一次插入排序，排序完成。
+
+5、快速排序
+
+- 开始设定一个基准值pivot
+- 将数组重新排列，所有比**pivot小的放在其前面**，**比pivot大的放后面**，这种操作称为分区(partition)操作
+- 对两边的数组重复前两个步骤; （分而治之算法思想）
+
+### 具体实现步骤如下：
+
+1. 首先选择一个基准元素，通常为数组的第一个或最后一个元素。
+
+2. 设置两个指针，一个指向数组的起始位置（低位），一个指向数组的结束位置（高位）。
+
+3. 使用两个指针从两个方向同时遍历数组，直到两个指针相遇。
+
+4. 从低位开始，比较当前元素与基准元素的大小关系：
+
+5. - 如果当前元素小于等于基准元素，则向右移动低位指针。
+   - 如果当前元素大于基准元素，则向左移动高位指针。
+   - 如果低位指针仍然在高位指针的左侧，则交换低位指针和高位指针所指向的元素。
+
+6. 重复步骤4，直到低位指针与高位指针相遇。
+
+7. 将基准元素与相遇位置的元素进行交换，确保基准元素位于其最终的排序位置。
+
+8. 根据基准元素的位置，将数组分为两个子数组，并递归地对这两个子数组进行快速排序。
+
+p=21
+
+left = 0,right=6
+
+21，5，11，44，17，22，28
+
+​                               r
+
+17，5，11，44，17，22，28
+
+​                       l        r
+
+17，5，11，21，44，22，28
+
+
+
+6、归并排序
+
+- 归并排序算法是采用分治法的一个非常典型的应用
+- 不断将数组一分为二，一直分到子数组的长度小于等于一（无法再分）
+- 通过递归的方法逐个比较大小自底向上有序地合并数组
+
+1. 将待排序序列分割成两个子序列，直到每个子序列中只有一个元素。
+2. 将相邻的两个子序列合并，并按照大小顺序合并为一个新的有序序列。
+3. 不断重复第2步，直到所有子序列都合并为一个有序序列。
+
+7、计数排序
+
+计数排序是一种非比较性的排序算法，适用于排序一定范围内的整数。它的基本思想是通过统计每个元素的出现次数，然后根据元素的大小依次输出排序结果。 
+
+1. 首先找出待排序数组中的最大值max和最小值min。
+2. 创建一个长度为max-min+1的数组count，用于统计每个元素出现的次数。
+3. 遍历待排序数组，将每个元素的出现次数记录在count数组中。
+4. 根据count数组和min值，得到每个元素在排序结果中的起始位置。
+5. 创建一个与待排序数组长度相同的临时数组temp，用于存储排序结果。
+6. 再次遍历待排序数组，根据count数组和min值确定每个元素在temp数组中的位置，并将其放入。
+7. 将temp数组中的元素复制回待排序数组，排序完成。
+
+8、堆排序
+
+堆排序是一种高效的排序算法，基于二叉堆数据结构实现。它具有稳定性、时间复杂度为O(nlogn)和空间复杂度为O(1)的特点。 
+
+1. 构建最大堆：将待排序数组构建成一个最大堆，即满足父节点大于等于子节点的特性。
+2. 将堆顶元素与最后一个元素交换：将最大堆的堆顶元素与堆中的最后一个元素交换位置，将最大元素放到了数组的末尾。
+3. 重新调整堆：对剩余的n-1个元素进行堆调整，即将堆顶元素下沉，重新形成最大堆。
+4. 重复步骤2和3，直到堆中的所有元素都被排列好。
+
+9、桶排序
+
+桶排序是一种线性时间复杂度的排序算法，它将待排序的数据分到有限数量的桶中，每个桶再进行单独排序，最后将所有桶中的数据按顺序依次取出，即可得到排序结果。 
+
+1. 首先根据待排序数据，确定需要的桶的数量。（最大值-最小值）/元素个数+1
+2. 遍历待排序数据，将每个数据放入对应的桶中。
+3. 对每个非空的桶进行排序，可以使用快速排序、插入排序等常用的排序算法。
+4. 将每个桶中的数据依次取出，即可得到排序结果。
+
+10、基数排序
+
+ 基数排序是一种非比较性排序算法，它通过将待排序的数据拆分成多个数字位进行排序。 
+
+1. 首先找出待排序数组中的最大值，并确定排序的位数。
+2. 从最低位（个位）开始，按照个位数的大小进行桶排序，将元素放入对应的桶中。
+3. 将各个桶中的元素按照存放顺序依次取出，组成新的数组。
+4. 接着按照十位数进行桶排序，再次将元素放入对应的桶中。
+5. 再次将各个桶中的元素按照存放顺序依次取出，组成新的数组。
+6. 重复上述操作，以百位、千位、万位等位数为基准进行排序，直至所有位数都被排序。
 
 #### 十五、文件读写
 
@@ -1238,6 +1470,7 @@ string dirPath = Path.GetDirectoryName(filePath);//通过文件名获得文件�
 Directory.Exists(dirPath);//判断文件夹是否存在
 Directory.CreateDirectory(dirPath);//创建文件夹
 DirectoryInfo dirInfo = new DirectoryInfo(dirPath);//生成文件夹的具体信息
+AppDomain.CurrentDomain.BaseDirectory//获得当前程序运行的目录
 
 ```
 
@@ -1295,3 +1528,814 @@ protected internal：只能在同一个程序集中访问，或者在类以及�
 - 从 C# 8.0 开始，接口可以定义其部分或全部成员的默认实现。 实现接口的类或结构不一定要实现具有默认实现的成员。 
 - 接口无法直接进行实例化。 其成员由实现接口的任何类或结构来实现。
 - 一个类或结构可以实现多个接口。 一个类可以继承一个基类，还可实现一个或多个接口。
+
+#### 十九、反射
+
+<img src="C:\Users\丁涛\AppData\Roaming\Typora\typora-user-images\1698567419964.png" alt="1698567419964"  />
+
+C#编译运行过程：
+
+编译的时候会将源代码编译成程序集，程序集以exe或者dll的形式呈现，程序集包含了中间语言（IL）和元数据
+
+在执行的时候，实时编译器（JIT）会将中间语言转化成机器码（本机代码）
+
+运行时，CLR会提供要发生的托管执行的基础结构和执行期间可使用的服务
+
+exe文件有程序入口，dll是动态，没有程序入口
+
+metadata：元数据，描述exe/dll的一个数据清单，有什么内容
+
+元数据包含了：类，方法，特性，属性，字段
+
+反射的优点：提高了程序的扩展性和灵活性，降低了耦合度
+
+反射的缺点：性能有所损耗
+
+
+
+使用场景
+
+【1】更新程序时（更新自己的dll）
+
+【2】使用别人的dll文件（私有的也能读取）
+
+反射就是操作metadata的一个类库，动态读取或者操作元数据
+
+反射是指程序可以访问检测和修改本身的状态或者行为的一种能力
+
+程序集包含模块，而模块包含类型，类型又包含成员。反射则提供了封装程序集、模块和类型的对象。 
+
+1.通过反射加载dll文件
+
+//Assembly assembly = Assembly.Load("Ant.DB.MySql");//加载方式一：dll文件名（当前程序运行目录下）
+//Assembly assembly = Assembly.LoadFile(@"E:\CsharpProjects\Ant.DB.MySql\bin\Debug\net5.0\Ant.DB.MySql.dll");//加载方式二：完整路径
+//Assembly assembly = Assembly.LoadFrom("Ant.DB.MySql.dll");//完全限定名
+Assembly assembly = Assembly.LoadFrom(@"E:\CsharpProjects\Ant.DB.MySql\bin\Debug\net5.0\Ant.DB.MySql.dll");//文件完整路径
+
+foreach (var type in assembly.GetTypes())//找到所有类型
+{
+	Console.WriteLine(type.Name);
+	foreach(var method in type.GetMethods())//找到所有方法
+	{
+		Console.WriteLine("这是{0}方法",method.Name);
+	}
+}
+
+2.通过反射创建对象
+
+```c#
+#region 使用反射创建对象
+//Assembly assembly = Assembly.LoadFrom ("Ant.DB.MySql.dll");//加载dll文件
+//Type type = assembly.GetType("Ant.DB.MySql.MysqlHelper");//获取类型，需要完整名称，命名空间加上类名
+//object oDBHelper = Activator.CreateInstance(type);//创建对象
+//IDBHelper dBHelper = oDBHelper as IDBHelper;
+//dBHelper.Query();
+#endregion
+
+#region 使用反射创建对象（带参数的构造函数）
+Assembly assembly = Assembly.LoadFrom("Ant.DB.MySql.dll");//加载dll文件
+Type type = assembly.GetType("Ant.DB.MySql.ReflectionTest");
+foreach(ConstructorInfo ctor in type.GetConstructors())//获取所有构造方法
+{
+    Console.WriteLine(ctor.Name);
+    foreach(var paramater in ctor.GetParameters())
+    {
+        Console.WriteLine(paramater.ParameterType);
+    }
+}
+
+object obj1 = Activator.CreateInstance(type);
+object obj2 = Activator.CreateInstance(type, new object[]{ "1234" });
+object obj3 = Activator.CreateInstance(type, new object[] {1111 });
+#endregion
+    
+
+```
+
+```c#
+测试类：
+class ReflectionTest
+{
+    private int _num = 0;
+
+    public string Phone = "1311111111";
+
+    public string Name { get; set; }
+
+    public string Address { get; set; }
+    
+    public ReflectionTest()
+    {
+        Console.WriteLine($"这是{this.GetType()}无参构造函数");
+    }
+
+    private ReflectionTest(string name)
+    {
+        Console.WriteLine($"这是{this.GetType()}有参构造函数，类型为{name.GetType()}");
+    }
+
+    public ReflectionTest(int id)
+    {
+        Console.WriteLine($"这是{this.GetType()}有参构造函数，类型为{id.GetType()}");
+    }
+    
+    public int PublicMethod()
+    {
+        Console.WriteLine($"Name is :{Name}");
+        return int.MinValue;
+    }
+
+    internal void InternalMethod()
+    {
+
+    }
+    private void PrivateMethod()
+    {
+
+    }
+}
+```
+
+
+
+Type类的使用：
+
+```c#
+获取Type实例的三种办法：
+ReflectionTest reflectionTest = new ReflectionTest();
+Type type1 = typeof(ReflectionTest);//用实例化对象
+Type type2 = reflectionTest.GetType();//用类型
+Type type3 = Type.GetType("Ant.DB.MySql.ReflectionTest,Ant.DB.MySql");//用Type静态方法，如果是同一个程序集下，就直接写命名空间.类型就可以简写为
+Type type3 = Type.GetType("Ant.DB.MySql.ReflectionTest");
+
+Console.WriteLine(type1);
+Console.WriteLine(type2);
+Console.WriteLine(type3);
+
+输出结果如下：
+Ant.DB.MySql.ReflectionTest
+Ant.DB.MySql.ReflectionTest
+Ant.DB.MySql.ReflectionTest
+*************************************************************************************
+Type的一些方法
+type1.Name
+type1.FullName
+type1.Namespace
+type1.Assembly
+type1.AssemblyQualifiedName
+输出结果如下：
+ReflectionTest
+Ant.DB.MySql.ReflectionTest
+Ant.DB.MySql
+Ant.DB.MySql, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+Ant.DB.MySql.ReflectionTest, Ant.DB.MySql, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+
+1.
+ConstructorInfo[] constructorInfos = type1.GetConstructors();//获得所有的公共构造函数
+foreach(var item in constructorInfos)
+{
+    Console.WriteLine(item.Name);
+    ParameterInfo[] parameterInfos = item.GetParameters();//获得函数的参数信息
+    foreach(var para in parameterInfos)
+    {
+        Console.WriteLine($"para.Name:{para.Name}, para.ParameterType:{para.ParameterType}");
+    }
+}
+输出结果如下：
+.ctor
+.ctor
+para.Name:id, para.ParameterType:System.Int32
+
+2.
+//获取当前Type 实例的所有Public方法
+MethodInfo[] methodInfos = type1.GetMethods();
+foreach (var item in methodInfos)
+{
+    Console.WriteLine($"{type1.Name}类型中有：{item.Name}方法，返回类型为{item.ReturnType}");
+}
+输出结果如下：  
+ReflectionTest类型中有：get_Name方法，返回类型为System.String
+ReflectionTest类型中有：set_Name方法，返回类型为System.Void
+ReflectionTest类型中有：get_Address方法，返回类型为System.String
+ReflectionTest类型中有：set_Address方法，返回类型为System.Void
+ReflectionTest类型中有：PublicMethod方法，返回类型为System.Int32
+ReflectionTest类型中有：GetType方法，返回类型为System.Type
+ReflectionTest类型中有：ToString方法，返回类型为System.String
+ReflectionTest类型中有：Equals方法，返回类型为System.Boolean
+ReflectionTest类型中有：GetHashCode方法，返回类型为System.Int32
+
+3.
+//获取当前Type 实例的所有Public属性
+PropertyInfo[] propertyInfos = type1.GetProperties();
+foreach (var item in propertyInfos)
+{
+    Console.WriteLine($"{type1.Name}类中有 属性-{item.Name} 类型为-{item.PropertyType}");
+}
+输出结果如下：
+ReflectionTest类中有 属性-Name 类型为-System.String
+ReflectionTest类中有 属性-Address 类型为-System.String
+
+4.
+//获取当前Type 实例的所有Public字段
+FieldInfo[] fieldInfos = type1.GetFields();
+foreach (var item in fieldInfos)
+{
+    Console.WriteLine($"{type1.Name}类中有 字段-{item.Name} 类型为-{item.FieldType}");
+}
+输出结果如下：
+ReflectionTest类中有 字段-Phone 类型为-System.String
+
+5.
+//获取当前Type 实例的所有公共成员，包括构造函数，属性，字段，方法
+MemberInfo[] memberInfos = type1.GetMembers();
+foreach (var item in memberInfos)
+{
+    Console.WriteLine($"{type1.Name}类中有 成员名称-{item.Name} 类型为-{item.MemberType}");
+}
+输出结果如下：
+ReflectionTest类中有 成员名称-get_Name 类型为-Method
+ReflectionTest类中有 成员名称-set_Name 类型为-Method
+ReflectionTest类中有 成员名称-get_Address 类型为-Method
+ReflectionTest类中有 成员名称-set_Address 类型为-Method
+ReflectionTest类中有 成员名称-PublicMethod 类型为-Method
+ReflectionTest类中有 成员名称-GetType 类型为-Method
+ReflectionTest类中有 成员名称-ToString 类型为-Method
+ReflectionTest类中有 成员名称-Equals 类型为-Method
+ReflectionTest类中有 成员名称-GetHashCode 类型为-Method
+ReflectionTest类中有 成员名称-.ctor 类型为-Constructor
+ReflectionTest类中有 成员名称-.ctor 类型为-Constructor
+ReflectionTest类中有 成员名称-Name 类型为-Property
+ReflectionTest类中有 成员名称-Address 类型为-Property
+ReflectionTest类中有 成员名称-Phone 类型为-Field
+```
+
+
+
+System.Activator类的应用
+
+```c#
+//Activator类主要用于创建对象的实例
+Type type = typeof(ReflectionTest);
+ReflectionTest reflectionTest=(ReflectionTest)Activator.CreateInstance(type);//无参构造
+//分别对于三个public构造方法，非公有的会报错
+object obj1 = Activator.CreateInstance(type);
+object obj2 = Activator.CreateInstance(type, new object[]{ "1234" });
+object obj3 = Activator.CreateInstance(type, new object[] {1111 });
+
+```
+
+System.Reflection.Assembly类的应用
+
+```c#
+1.通过反射加载dll文件
+Assembly assembly1 = Assembly.Load("Ant.DB.MySql");//dll文件名
+Assembly assembly2 = Assembly.LoadFile(AppDomain.CurrentDomain.BaseDirectory+"Ant.DB.MySql.dll");//完整路径
+Assembly assembly3 = Assembly.LoadFrom("Ant.DB.MySql.dll");//完全限定名
+Assembly assembly4 = Assembly.LoadFrom(AppDomain.CurrentDomain.BaseDirectory+"Ant.DB.MySql.dll");//完整路径
+```
+
+反射创建对象的三种方法：
+
+```c#
+Type type = typeof(ReflectionTest);
+//第一种，用构造方法，得到对应的构造函数，再传入相应的参数
+ConstructorInfo constructorInfo1 = type.GetConstructor(new Type[] { });
+ConstructorInfo constructorInfo2 = type.GetConstructor(new Type[] {typeof(string)});
+ConstructorInfo constructorInfo3 = type.GetConstructor(new Type[] { typeof(int) });
+constructorInfo1.Invoke(new object[] { });
+constructorInfo2.Invoke(new object[] { "1111" });
+constructorInfo3.Invoke(new object[] { 22222 });
+//第二种，Activator方法
+Activator.CreateInstance(type);
+Activator.CreateInstance(type, new object[] {"123" });
+Activator.CreateInstance(type, new object[] {12345 });
+//第三种 通过Assembly创建对象，true表示忽略大小写
+Assembly assembly = Assembly.LoadFrom("Ant.DB.MySql.dll");//加载dll文件
+ReflectionTest obj = assembly.CreateInstance("Ant.DB.MySql.ReflectionTest", true) as ReflectionTest;
+```
+
+其他方法
+
+```c#
+PropertyInfo propertyInfo = type.GetProperty("Name");
+propertyInfo.SetValue(obj,"张三");
+MethodInfo methodInfo = type.GetMethod("PublicMethod");
+methodInfo.Invoke(obj,new object[] { });
+```
+
+#### 二十、索引器
+
+索引器（indexer）使得对象能够用与数组相同的方式（即使用下标）进行索引
+
+索引器声明：例如
+
+```c#
+class Student
+{
+    private Dictionary<string, int> scroeDictionary = new Dictionary<string, int>();
+
+    string[] weekarray = new string[daysCount];
+    static int daysCount = 7;
+
+    public int? this[string subject]
+    {
+        get 
+        {
+            if (this.scroeDictionary.ContainsKey(subject))
+            {
+                return this.scroeDictionary[subject];
+            }
+            return null;
+        }
+        set 
+        {
+            if (value.HasValue == false)
+            {
+                throw new Exception("Score cannot be null");
+            }
+
+            if (scroeDictionary.ContainsKey(subject))
+            {
+                scroeDictionary[subject] = value.Value;
+            }
+            else
+            {
+                this.scroeDictionary.Add(subject, value.Value);
+            }
+        }
+
+    }
+
+    public string this[int index]
+    {
+        get
+        {
+            string week;
+
+            if (index >= 0 && index <= daysCount - 1)
+                week = weekarray[index];
+            else
+                week = "";
+
+            return week;
+        }
+        set
+        {
+            if (index >= 0 && index <= daysCount - 1)
+                weekarray[index] = value;
+        }
+    }
+}
+```
+
+定义了两个索引器
+
+#### 二十一、数据类型
+
+C#数据类型大致分为三类，值类型，引用类型和指针类型
+
+**1.值类型**
+
+C# 中的值类型是从 System.ValueType 类中派生出来的，对于值类型的变量我们可以直接为其分配一个具体的值。当声明一个值类型的变量时，系统会自动分配一块儿内存区域用来存储这个变量的值，需要注意的是，变量所占内存的大小会根据系统的不同而有所变化。 
+
+![1700123591815](C:\Users\丁涛\AppData\Roaming\Typora\typora-user-images\1700123591815.png)
+
+ 如果想要获取类型或变量的确切大小，可以使用 sizeof 方法，示例：sizeof(int)
+
+**2.引用类型**
+
+引用类型的变量中并不存储实际的数据值，而是存储的对数据（对象）的引用，换句话说就是，引用类型的变量中存储的是数据在内存中的位置。当多个变量都引用同一个内存地址时，如果其中一个变量改变了内存中数据的值，那么所有引用这个内存地址的变量的值都会改变。C# 中内置的引用类型包括 Object（对象）、Dynamic（动态）和 string（字符串）。
+
+
+
+#### 二十二、ref，out，in
+
+- ref 修饰符，指定参数由引用传递，可以由调用方法读取或写入。
+- out 修饰符，指定参数由引用传递，必须由调用方法写入。必须在调用方法中赋值
+- in 修饰符，指定参数由引用传递，可以由调用方法读取，但不可以写入。不能在调用方法中赋值
+
+三个在使用前必须赋值
+
+```c#
+Get1(ref a);
+Get2(out a);
+Get3(in a);
+
+public static void Get1(ref int a)
+{
+
+}
+
+public static void Get2(out int a)
+{
+    a = 5;//必须赋值
+}
+
+public static void Get3(in int a)
+{
+    a = 5;//错误，不能赋值
+}
+```
+
+#### 二十三、IOC（Inversion of control）
+
+IOC：降低程序的耦合性，使得程序更加容易维护
+
+IOC的思想就是把对象之间的依赖关系交给容器来处理，上层不再依赖于下层，而是依赖于抽象，IOC 容器来实例化下层。
+所以IOC它就是一种目标，让程序解耦，让第三方的IOC容器来创建对象，DI是实现IOC的手段。
+IOC也可以理解为一个实例化对象的工厂，它的这种思想也符合设计模式中的依赖倒置原则。
+
+#### 二十四、特性
+
+特性（Attribute）是用于在运行时传递程序中各种元素（比如类、方法、结构、枚举、组件等）的行为信息的声明性标签。 
+
+```c#
+public enum AttributeTargets
+    {
+        //
+        // 摘要:
+        //     Attribute can be applied to an assembly.
+        Assembly = 1,
+        //
+        // 摘要:
+        //     Attribute can be applied to a module. Module refers to a portable executable
+        //     file (.dll or.exe) and not a Visual Basic standard module.
+        Module = 2,
+        //
+        // 摘要:
+        //     Attribute can be applied to a class.
+        Class = 4,
+        //
+        // 摘要:
+        //     Attribute can be applied to a structure; that is, a value type.
+        Struct = 8,
+        //
+        // 摘要:
+        //     Attribute can be applied to an enumeration.
+        Enum = 16,
+        //
+        // 摘要:
+        //     Attribute can be applied to a constructor.
+        Constructor = 32,
+        //
+        // 摘要:
+        //     Attribute can be applied to a method.
+        Method = 64,
+        //
+        // 摘要:
+        //     Attribute can be applied to a property.
+        Property = 128,
+        //
+        // 摘要:
+        //     Attribute can be applied to a field.
+        Field = 256,
+        //
+        // 摘要:
+        //     Attribute can be applied to an event.
+        Event = 512,
+        //
+        // 摘要:
+        //     Attribute can be applied to an interface.
+        Interface = 1024,
+        //
+        // 摘要:
+        //     Attribute can be applied to a parameter.
+        Parameter = 2048,
+        //
+        // 摘要:
+        //     Attribute can be applied to a delegate.
+        Delegate = 4096,
+        //
+        // 摘要:
+        //     Attribute can be applied to a return value.
+        ReturnValue = 8192,
+        //
+        // 摘要:
+        //     Attribute can be applied to a generic parameter. Currently, this attribute can
+        //     be applied only in C#, Microsoft intermediate language (MSIL), and emitted code.
+        GenericParameter = 16384,
+        //
+        // 摘要:
+        //     Attribute can be applied to any application element.
+        All = 32767
+    }
+
+
+特性的定义
+[AttributeUsage(AttributeTargets.Field)]
+public sealed class CodeAttribute : Attribute
+{
+    public CodeAttribute(string code)
+    {
+        Code = code;
+    }
+
+    public string Code = "";
+}
+
+使用
+public enum MyAttributeEnum
+{
+    [Code("Monday")]
+    Monday,
+
+    [Code("Tuesday")]
+    Tuesday,
+
+    [Code("Wendesday")]
+    Wendesday,
+
+    [Code("Turthday")]
+    Turthday,
+
+    [Code("Friday")]
+    Friday,
+
+    [Code("Saturday")]
+    Saturday,
+
+    [Code("Sunday")]
+    Sunday,
+}
+
+如何获得特性的内容
+定义一个GetCode方法
+public static string GetCode(this Enum value)
+{
+    // NULL判定
+    if (value == null)
+    {
+        return string.Empty;
+    }
+
+    return value.GetAttribute<CodeAttribute>()?.Code
+        ?? value.ToString();
+}
+
+private static TAttribute GetAttribute<TAttribute>(this Enum value) where TAttribute : Attribute
+{
+    //通过反射
+    var fieldInfo = value.GetType().GetField(value.ToString());
+    if (fieldInfo == null)
+    {
+        return null;
+    }
+    //通过GetCustomAttributes方法得到特性的相关信息，.Cast方法是投射
+    var attributes
+        = fieldInfo.GetCustomAttributes(typeof(TAttribute), false)
+        .Cast<TAttribute>();
+
+    if ((attributes?.Count() ?? 0) <= 0)
+        return null;
+
+    return attributes.First();
+}
+```
+
+#### 二十五、面向对象的三大特征
+
+封装：将事物的属性和方法封装在一个类中，属性描述事物的特征，方法描述事物的行为
+
+将信息隐藏在类中，私有化，提供方法对这些隐藏信息进行读取和操作get，set
+
+隐藏了实现细节，还要对外提供可以访问的方式。便于调用者的使用。这是核心之一，也可
+以理解为就是封装的概念。
+
+提高了安全性
+
+继承：
+
+就是子类继承父类的特征和行为，使得子类对象（实例）具有父类的实例域和方法，或子类从父类继承方法，使得子类具有父类相同的行为。 
+
+提高了代码的复用性
+
+类与类之间有了联系，为多态创造基础
+
+多态： 父类引用指向子类实例 
+
+**多态的实现的必要条件:**
+
+1. 存在继承关系
+2. 存在方法重写
+3. 父类引用指向子类对象
+
+**多态的优点**
+
+1. 简化了代码
+2. 提高了维护性和扩展性
+
+
+
+C#
+多线程√
+
+异步√
+委托√
+数据类型√
+泛型√
+异常 try catch finally√
+
+反射√
+特性√
+索引器√
+集合√
+
+ArrayList
+
+HashTable
+
+List<T>
+
+Dictionary<K,V>
+
+HashSet<T>
+
+Stack
+
+Queue
+
+
+
+？的使用√
+
+（1）三元运算符 a = 3?3:2
+
+（2）可空值类型 int? a = 4; 是Nullable<T>类型
+
+（3） null 条件运算符(?.和?[]) , 是一种成员访问符的拓展 
+
+?.表示成员访问运算符，主要用于对象属性、方法等成员访问，?[]表示元素访问运算符，主要用于集合中元素访问
+
+ （4）null 合并运算符（??和??=） 
+
+expr1??expr2
+
+如果expr1结果为null，返回expr2的计算结果，如果expr1不为null，返回expr1的结果
+
+??=是合并赋值运算符
+
+a ??= b
+//等价于
+
+a = a ?? b
+
+//等价于
+
+if (a is null)
+{
+    a = b;
+}
+
+
+
+static，const，readonly√
+
+静态变量属于类型，可以在声明或者静态构造函数中赋值，赋值后不可修改
+
+const常量属于类型，不属于对象，声明就要初始化，且不可修改，效率高一点，只能用于基本数据类型和string
+
+readonly属于对象，初始化后不可修改，可以在声明或者构造函数中初始化
+
+const在编译时就已经确定，static和readonly在运行时确定
+
+各种只读的场景：
+
+为了提高程序的可读性和执行效率------常量
+
+为了防止对象的值被改变------只读字段
+
+向外暴露不允许被修改的数据------只读属性（静态或非静态）只有get，功能和常量有一些重叠
+
+当希望成为常量的值不能被const时（类/自定义结构体）------静态只读字段
+
+public readonly TestClass testClass = new TestClass();
+
+
+
+控制反转IOC√
+
+协变逆变ref out in√
+
+原码反码补码√
+
+解决有符号正数的加减运算，原码是二进制本身，正数的反码是原码，负数的反码是每位都取反，正数的补码就是原码，负数的补码是反码+1
+
+
+
+
+
+wpf
+绑定√
+数据驱动√
+路由事件√
+style√
+模板√
+控件
+自定义控件
+常用方法
+
+程序设计
+六大原则
+设计模式
+排序算法
+
+
+
+工作中的难点：
+多个函数，参数列表，返回类型一样，条件不一样，用不同的函数
+用委托
+
+
+遇到这么解决：
+技术知识：
+在其他业务中去寻找答案
+百度搜索
+请教其他人
+
+业务知识：
+
+性能调查：
+listview化
+从控件入手
+
+患者保険登录：
+速度变慢
+从log中查看耗时
+先是得到所以处方签，然后得到这个患者的处方签
+，然后得到这个患者的保険
+其实在受付一览中就已经
+
+核心业务：
+来局设定的过去処方
+想法：设置不同的模板
+
+分割処方:
+难点：排序+style
+点击事件得到那个label
+
+
+
+分割処方：
+
+检索区域
+
+数据展示区域
+
+功能键区域
+
+
+
+难点：
+
+点击排序
+
+DataGrid_LabelPresenterSortStyle 排序style
+
+添加点击事件
+
+判断是否点的表头，
+
+给每个表头都加了Name，Name就是数据源的属性名，
+
+还有定义了需要的排序项（有一个default，默认排序），
+
+先判断点击的那一项是否是需要排序的
+
+然后就是还需要一个变量来记录一下升序降序默认排序
+
+还需要判断下次排序项目是否和上一次排序项目一致，如果一致，就在上次排序基础上进行排序
+
+例如上次是升序，这次就是降序，如果不一致，就从升序开始排序
+
+排序逻辑处理完后，需要在画面上能显现出按照上面排序的，对于排序的项目，文字下面标上下划线以示区分
+
+然后制作一个排序图标箭头Path，在上面的逻辑处理中和Path的tag属性做关联，1表示升序，0表示降序，""表示默认排序
+
+
+
+来局設定：
+
+保険选择列表
+
+模板选择器：
+
+根据不同的保険类型
+
+
+
+
+
+文件相关：
+OpenFileDialog
+FolderBrowserDialog
+Path
+File
+Directory
+FileInfo
+DirectoryInfo
+FileStream
+StreamReader
+StreamWriter
+
+
+https://developer.aliyun.com/article/715728
